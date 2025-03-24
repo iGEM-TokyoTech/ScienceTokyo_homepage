@@ -1,0 +1,18 @@
+---
+const { ...props } = Astro.props;
+---
+
+<blockquote {...props} class:list={["mdx-blockquote"]}>
+  <slot />
+</blockquote>
+<style>
+  .mdx-blockquote {
+    position: relative;
+    padding: 0px 10px 5px 40px;
+    box-sizing: border-box;
+    font-style: italic;
+    color: #464646;
+    background: #fff4db;
+    border-top: solid 3px #ffd596;
+  }
+</style>

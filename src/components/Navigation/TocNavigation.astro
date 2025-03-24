@@ -1,0 +1,236 @@
+---
+import {
+    navConfig,
+    type NavConfigEntry,
+    type PageTitle,
+  } from "../../siteConfig/pages.ts";
+  import { navigationWidth } from "../../layouts/Layout.astro";
+  
+  import { NavigationManager } from "../scripts/NavigationManager.ts";
+  import type { MarkdownHeading } from "astro";
+  /**
+    *  import {
+    *    navConfigWithActiveInfo,
+    *   entryActiveAnalysis,
+    *    type EntryWithActiveInfo
+    *  } from "./HeaderNavigation.astro";
+    * */
+      
+  
+  import TocOnePage from "./TocOnePage.astro";
+  import A from "../A.astro";
+  
+  export type TabHeading = {
+    id: number;
+    name: string;
+    headings: MarkdownHeading[];
+  };
+  
+  interface Props {
+    /**
+     * 開かれている page
+     */
+    pageTitle: PageTitle;
+    headings?: MarkdownHeading[];
+    tabHeadings?: TabHeading[];
+  }
+  const { pageTitle, headings, tabHeadings } = Astro.props;
+
+  type EntryWithActiveInfo = {
+  /**
+   * NavConfigEntry
+   */
+  confEntry: NavConfigEntry;
+
+  /**
+   * is the entry is activated ?
+   */
+  isActive: boolean;
+};
+
+  const entryActiveAnalysis = (  //ボタンを押したらそのサイトに入れるかどうかを示す
+  entry: NavConfigEntry,
+  pageTitle: PageTitle,
+): EntryWithActiveInfo => {   //戻り値の型を示している
+  if ("subPages" in entry) {   //subPageがあるかどうかの判定
+    for (let subPage of entry.subPages) {
+      if (subPage.title === pageTitle) {   //subpageのタイトルが代入されたページタイトルとあっているかの判定
+        return {
+          confEntry: entry,
+          isActive: true,
+        };
+      }
+    }
+    return {
+      confEntry: entry,
+      isActive: false,
+    };
+  } else {
+    return {
+      confEntry: entry,
+      isActive: entry.title === pageTitle,
+    };
+  }
+};
+
+const navConfigWithActiveInfo = navConfig.map((entry) =>
+  entryActiveAnalysis(entry, pageTitle),
+);
+  
+  
+---
+  <nav id={NavigationManager.IDS.navigation} class:list={["subsite-nav"]}>
+  
+  
+  <!-- Home Dry などなど 各 ページへのナビゲーション -->
+  <ul class="pages-nav">
+    {
+      navConfigWithActiveInfo.map((conWithAct) =>
+        "subPages" in conWithAct.confEntry ? null : ( 
+          <TocOnePage
+            pageTitle={pageTitle}
+            entry={conWithAct.confEntry}
+            isDefaultEntry={conWithAct.isActive}
+            headings={headings}
+            tabHeadings={tabHeadings}
+            class="nav-item"
+          />
+        ),
+      )
+    }
+    
+    
+  </ul>
+</nav>
+<!-- 
+<Hamburger class:list={["hamburger-visiblity"]} />-->
+
+<style define:vars={{ navigationWidth }}>
+  :root {
+    --nav-bg-color: #dbffdb; /* 淡い緑の背景色 */
+    --nav-border-color: #054705; /* 薄い緑の境界線 */
+    --nav-text-color: #000000; /* 通常時の文字色（黒） */
+    --nav-link-color: #2d8f2d; /* リンク色（緑） */
+    --nav-link-hover-color: #1a5e1a; /* ホバー時のリンク色（濃い緑） */
+    --nav-active-color: #1a5e1a; /* アクティブ状態のリンク色 */
+    --nav-icon-color: #2d8f2d; /* アイコンの色 */
+    --nav-icon-hover-color: #1a5e1a; /* ホバー時のアイコン色 */
+    --nav-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* モダンなフォント */
+    --nav-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* シャドウ */
+    --nav-border-radius: 8px; /* 角の丸み */
+    --nav-padding: 1rem; /* パディング */
+    --nav-transition: all 0.3s ease; /* トランジション */
+    --pages-nav-border: 1px solid #010101; /* ページナビゲーションの境界線 */
+    --pages-nav-gradient: linear-gradient(
+      to bottom,
+      #a0ffa0,
+      #d0ffd0
+    ); /* ページナビゲーションのグラデーション */
+  }
+
+  
+
+  .subsite-nav {
+     /* 背景色 */
+    
+    width: var(--navigationWidth); /* 幅 */
+    position: fixed;
+    top: 30%;
+    left: 0; /* 左端に固定 */
+    height: 100vh; /* 全高 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中央揃え */
+    padding: var(--nav-padding); /* パディング */
+    transition: var(--nav-transition); /* トランジション */
+    z-index: 10; /* 他の要素より前面に表示 */
+    list-style: none; /* リストのマーカーを消す */
+  }
+
+  .pages-nav::before
+  .pages-nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+  }
+
+  
+  .subsite-nav :global(a) {
+    text-decoration: none;
+    font-weight: 400;
+    color: #434236;
+  }
+
+  
+  
+  
+  .pages-nav {
+    height: calc(100vh - 150px);
+    
+  }
+
+  .nav-item {
+    padding: 0.2rem 0.6rem;
+    list-style: none;
+  }
+
+  @media (max-width: 768px) {
+    .site-nav {
+      /**
+       最初は見えない
+      */
+      display: none;
+    }
+
+    .site-nav.visible {
+      /**
+      .visible が付与されると見える
+     */
+      display: block;
+      position: fixed;
+      left: 0;
+      /**
+        .visible のとき背景用の要素 (nav-out) が一面に広がりナビゲーションはその上に表示されないと行けない
+       */
+      z-index: 2;
+      /**
+        画面幅いっぱい
+       */
+      width: 100%;
+
+      height: auto;
+    }
+
+    .logo-wrapper {
+      width: auto;
+      height: var(--logo-height);
+      padding: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .logo-wrapper > a {
+      height: 150px;
+    }
+
+    .logo-name {
+      /**
+    200px - 150px
+     */
+      height: 50px;
+      line-height: 25px;
+    }
+
+    .pages-nav {
+      list-style: none;
+      height: calc(100vh - 200px);
+      max-height: calc(100vh - 200px);
+    }
+
+    .hamburger-visiblity {
+      display: inline-block;
+    }
+  }
+</style>

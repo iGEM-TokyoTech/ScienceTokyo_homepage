@@ -1,0 +1,15 @@
+---
+const { ...props } = Astro.props;
+---
+
+<p {...props} class:list={["mdx-paragraph"]}>
+  <slot />
+</p>
+
+<style>
+  .mdx-paragraph {
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.9rem;
+  }
+</style>

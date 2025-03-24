@@ -1,0 +1,13 @@
+---
+
+import MDXLayout from "../layouts/MDXLayout.astro";
+import { Content, getHeadings } from "../mdContents/about.mdx"; 
+import components from "../mdContents/about.mdx"; 
+
+---
+
+<MDXLayout title="About" headings={getHeadings()} imgSrc ="/images/group_photo_blur.jpg" >
+  <Content components={components} />
+</MDXLayout>
+
+

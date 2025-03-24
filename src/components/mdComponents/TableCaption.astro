@@ -1,0 +1,10 @@
+---
+import { TableCaptionManager } from "../scripts/TableCaptionManager";
+---
+
+<div class:list={[TableCaptionManager.CLASSES.container]}>
+  <span class:list={[TableCaptionManager.CLASSES.caption]}
+    ><slot name="caption" /></span
+  >
+  <slot />
+</div>

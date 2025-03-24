@@ -1,0 +1,13 @@
+---
+import { DummyContainerManager } from "../scripts/DummyContainer";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<div data-dummy-name={name} class:list={[DummyContainerManager.CLASS]}>
+  <slot />
+</div>

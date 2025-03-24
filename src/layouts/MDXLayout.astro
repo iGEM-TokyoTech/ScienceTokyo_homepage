@@ -1,0 +1,27 @@
+---
+/**
+ * レイアウトの中でマークダウンの要素のレイアウト
+ */
+ import Layout from "./Layout.astro";
+import MDXDocEnv from "../components/MDXDocEnv.astro";
+import { type BaseLayoutProps } from "./BaseLayout.astro";
+import { type MarkdownHeading } from "astro";
+import { MDXDocEnvManager } from "../components/scripts/MDXDocEnvManager";
+import PageHeader from "./PageHeader.astro";
+
+interface Props extends BaseLayoutProps {
+  headings?: MarkdownHeading[];
+  imgSrc?: string;
+}
+
+const { headings, imgSrc, ...props } = Astro.props;
+---
+
+<Layout headings={headings} {...props}> 
+  <PageHeader title={props.title} imgSrc={imgSrc ?? ""} />
+  <MDXDocEnv class={MDXDocEnvManager.CLASSES.docenv}>
+    <slot /> 
+  </MDXDocEnv>
+</Layout>
+
+<script></script>

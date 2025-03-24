@@ -1,0 +1,124 @@
+---
+interface Props {
+  
+  headings: string;
+  imgSrc: string;
+}
+
+const { headings, imgSrc } = Astro.props;
+
+const createStringGroups = (strings: string[] | string): string[][] => {
+  if (strings instanceof Array) {
+    const result: string[][] = [];
+    let currentGroup: string[] = [];
+    let currentLength = 0;
+
+    for (const str of strings) {
+      const strLength = str.length;
+
+      // もし単体で 30 文字以上ならその文字列単体でグループ化
+      if (strLength > 30) {
+        if (currentGroup.length > 0) {
+          // 現在のグループを結果に追加
+          result.push(currentGroup);
+          currentGroup = [];
+          currentLength = 0;
+        }
+        result.push([str]); // 単体で新しいグループとして追加
+      } else {
+        // 現在のグループに追加可能か確認
+        if (currentLength + strLength > 30) {
+          // 現在のグループを結果に追加して新しいグループを作成
+          result.push(currentGroup);
+          currentGroup = [str];
+          currentLength = strLength;
+        } else {
+          // 現在のグループに追加
+          currentGroup.push(str);
+          currentLength += strLength;
+        }
+      }
+    }
+
+    // 最後のグループがあれば結果に追加
+    if (currentGroup.length > 0) {
+      result.push(currentGroup);
+    }
+
+    return result;
+  } else {
+    return [[strings]];
+  }
+};
+
+
+---
+
+<div class:list={["interview-card"]}>
+  <div class:list={["interview-header"]}>
+    
+    <div class = "card-headings">{headings}</div>
+  </div>
+  <div class:list={["interview-content"]}>
+    <img src={imgSrc} />
+    <div>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .interview-card {
+    max-width: 100%;
+    margin: 2rem auto; /* More consistent top/bottom margins */
+    padding: 1.5rem; /* Padding inside the card */
+    background-color: white; /* Card background color */
+    border-radius: 10px; /* Rounded corners for a softer feel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+  }
+
+  .interview-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0; /* Divider between header and content */
+  }
+
+  .card-headings {
+    font-weight: bold; /* Highlight the interviewees' names */
+  }
+
+  .interview-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .interview-content img {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 8px; /* Rounded corners for the image */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the image */
+  }
+
+  @media (max-width: 768px) {
+    .interview-header {
+      grid-template-columns: 1fr; /* Stacks interviewees and belonging */
+      gap: 0.5rem;
+    }
+
+    .interview-content {
+      grid-template-columns: 1fr; /* Stacks image and content for smaller screens */
+      max-height: 40vh;
+      overflow-y: scroll;
+    }
+
+    .interview-content img {
+      max-height: 40vh;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+const { ...props } = Astro.props;
+---
+
+<aside {...props} class:list={["mdx-aside"]}>
+  <slot />
+</aside>
+
+<style>
+
+  .mdx-aside {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fff9e5;
+    color: #333;
+}
+
+.mdx-aside::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-width: 0 20px 20px 0;
+    border-style: solid;
+    border-color: #dfdec0 #fff;
+    box-shadow: -1px 1px 1px rgb(0 0 0 / 5%);
+    content: '';
+}
+</style>
+

@@ -1,0 +1,15 @@
+---
+const { ...props } = Astro.props;
+---
+
+<section {...props} class:list={["mdx-section"]}>
+  <slot />
+</section>
+
+<style>
+  section {
+    padding: 1.5rem;
+    background-color: #f2f6f3;
+    margin: 1rem;
+  }
+</style>

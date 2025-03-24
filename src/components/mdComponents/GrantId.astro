@@ -1,0 +1,10 @@
+---
+import { GrantIdManager } from "../scripts/GrantIDManager";
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<span data-dummy-id={id} class:list={[GrantIdManager.CLASS]}></span>

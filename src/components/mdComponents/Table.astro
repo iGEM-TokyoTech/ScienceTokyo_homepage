@@ -1,0 +1,68 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"table"> {}
+
+const { ...props } = Astro.props;
+---
+
+<div class:list={["mdx-table-wrapper"]}>
+  <table class:list={["mdx-table"]} {...props}><slot /></table>
+</div>
+
+<style>
+  .mdx-table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px; /* テーブル全体に角丸を追加 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 軽い影を追加して浮き上がらせる */
+    margin: 1rem 0;
+  }
+
+  .mdx-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* モダンなフォントに変更 */
+  }
+
+  .mdx-table :global(th) {
+    background-color: #e6ffe6; /* ヘッダーの淡い緑色 */
+    border: 2px solid #8fbc8f; /* ヘッダーのボーダーを太く */
+    padding: 12px 20px;
+    font-weight: bold;
+    position: sticky;
+    top: 0; /* ヘッダーを固定 */
+    z-index: 1;
+  }
+
+  .mdx-table :global(td),
+  .mdx-table :global(th) {
+    padding: 12px 20px;
+    min-width: 50px;
+    border: 1px solid #d5e5ca; /* セルにボーダーを追加して縦線を表示 */
+  }
+
+  .mdx-table :global(tr) {
+    transition: background-color 0.3s ease;
+  }
+
+  /* 偶数行の背景色を変更 */
+  .mdx-table :global(tr:nth-child(even) td) {
+    background-color: #f0fff4; /* 偶数行に淡い緑色 */
+  }
+
+  .mdx-table :global(caption) {
+    caption-side: top;
+    text-align: center !important;
+  }
+
+  /* レスポンシブデザインの調整 */
+  @media (max-width: 600px) {
+    .mdx-table :global(td),
+    .mdx-table :global(th) {
+      padding: 8px 10px;
+    }
+  }
+</style>

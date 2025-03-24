@@ -1,0 +1,160 @@
+---
+import {
+  navConfig,
+  type NavConfigEntry,
+  type PageTitle,
+} from "../../siteConfig/pages.ts";
+
+
+import { NavigationManager } from "../scripts/NavigationManager.ts";
+import OnePage from "./OnePage.astro";
+import A from "../A.astro";
+
+
+
+interface Props {
+  /**
+   * 開かれている page
+   */
+  pageTitle: PageTitle;
+  
+}
+const { pageTitle} = Astro.props;
+
+type EntryWithActiveInfo = {
+  /**
+   * NavConfigEntry
+   */
+  confEntry: NavConfigEntry;
+
+  /**
+   * is the entry is activated ?
+   */
+  isActive: boolean;
+};
+
+const entryActiveAnalysis = (
+  entry: NavConfigEntry,
+  pagetitle: PageTitle,
+): EntryWithActiveInfo => {
+  if ("subPages" in entry) {
+    for (let subPage of entry.subPages) {
+      if (subPage.title === pagetitle) {
+        return {
+          confEntry: entry,
+          isActive: true,
+        };
+      }
+    }
+    return {
+      confEntry: entry,
+      isActive: false,
+    };
+  } else {
+    return {
+      confEntry: entry,
+      isActive: entry.title === pagetitle,
+    };
+  }
+};
+
+const navConfigWithActiveInfo = navConfig.map((entry) =>
+  entryActiveAnalysis(entry, pageTitle),
+);
+
+export { 
+  navConfigWithActiveInfo,
+  entryActiveAnalysis,
+  type EntryWithActiveInfo
+ };
+
+---
+
+<nav id={NavigationManager.IDS.navigation} class:list={["site-nav"]}>
+  <A href="/">
+    <img class="logo-img" src="/images/iGEM_ScienceTokyo.jpg" alt = "iGEM_ScienceToky_logo" />
+  </A>
+  
+  <!-- Home Dry などなど 各 ページへのナビゲーション -->
+  <ul class="header-nav">
+    <div class="nav-item">
+      {
+        navConfigWithActiveInfo.map((conWithAct) =>
+          "subPages" in conWithAct.confEntry ? null :  (
+            <OnePage
+              pageTitle={pageTitle}
+              entry={conWithAct.confEntry}
+              isDefaultEntry={conWithAct.isActive}
+            
+              
+              
+            />
+          ),
+        )
+      }
+    </div>
+  </ul>
+</nav>
+
+
+<style>
+  .site-nav {
+    background-color: white;
+    display: flex;
+    position: fixed;
+    top: 0;
+    /**
+     ナビゲーションは左いっぱい
+    */
+    height: 80px;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .site-nav :global(a) {
+    font-weight: 500 !important;
+    text-decoration: none;
+    color: inherit;
+  }
+
+
+  /**
+    ロゴ(画像) と ロゴ名は縦に同じように並んでいて欲しい
+   */
+  
+
+  .header-nav {
+    list-style: none;
+    width:100%;
+    margin-right:auto;
+    
+    
+  }
+
+  .nav-item {
+    display:flex;
+    width : 100%;
+    justify-content: right;
+    height: 100%;
+  
+
+  }
+
+
+
+
+  .logo-img {
+    position:block;
+    height:90%;
+    padding-top:0.5rem ;
+    object-fit: contain;
+  }
+
+  
+  
+</style>
+<!-- 
+<script>
+  import { AllScripts } from "../scripts/AllScripts";
+  AllScripts.homeNav();
+</script> -->

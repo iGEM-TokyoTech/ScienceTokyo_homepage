@@ -1,0 +1,56 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { SinglePageConfigEntry, PageTitle } from "../../siteConfig/pages";
+import { type TabHeading } from "./TocNavigation.astro";
+
+/**
+ * componnents import
+ */
+import ToC from "../ToC/ToC.astro";
+import TabToC from "../ToC/TabToC.astro";
+import A from "../A.astro";
+
+interface Props {
+  pageTitle: PageTitle;
+  entry: SinglePageConfigEntry;
+  isDefaultEntry: boolean;
+  headings?: MarkdownHeading[];
+  tabHeadings?: TabHeading[];
+  class?: string[] | string;
+}
+
+const {
+  pageTitle,
+  entry,
+  isDefaultEntry,
+  headings,
+  tabHeadings,
+  class: className,
+} = Astro.props;
+
+const classList = className
+  ? className instanceof Array
+    ? className
+    : [className]
+  : undefined;
+---
+
+<li
+  class:list={classList}
+  data-default-page={isDefaultEntry ? "true" : "false"}
+>
+  
+  {
+    (headings && pageTitle === entry.title && <ToC headings={headings} />) ||
+      (tabHeadings && pageTitle === entry.title && (
+        <TabToC tabHeadings={tabHeadings} />
+      ))
+  }
+</li>
+
+<style>
+li {
+  list-style: none;
+}
+</style>
+

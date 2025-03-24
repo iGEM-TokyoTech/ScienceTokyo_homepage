@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {}
+
+const { ...props } = Astro.props;
+---
+
+<article class:list={["mdx-content"]} class={props.class} {...props}>
+  <slot />
+</article>
+
+<style>
+  .mdx-content {
+    max-width: min(1000px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mdx-content
+    :global(
+      *:not(
+          .katex-display,
+          .katex-display *,
+          .katex,
+          .katex *,
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6
+        )
+    ) {
+    text-align: justify;
+  }
+
+  :global(.mdx-auto-section) {
+    padding: 2rem;
+    margin: 1rem;
+  }
+
+  .mdx-content > :global(*:not(section)) {
+    margin: 1.5rem 3rem 0 3rem;
+  }
+</style>

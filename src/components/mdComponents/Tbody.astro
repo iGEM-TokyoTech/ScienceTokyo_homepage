@@ -1,0 +1,11 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"tbody"> {}
+
+const { ...props } = Astro.props;
+---
+
+<tbody class:list={["mdx-tbody"]} {...props}><slot /></tbody>
+
+<style></style>

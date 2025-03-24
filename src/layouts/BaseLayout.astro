@@ -1,0 +1,101 @@
+---
+/**
+ * styleはあまり決めてない。かなり根本の内容。変える必要なし
+ * ページの説明とlinktytleを設定するBaseLeyoutProps
+ */
+ export interface BaseLayoutProps {
+  /**
+   * ページの説明
+   */
+  description?: string;
+  /**
+   * タイトル
+   */
+  title: PageTitle;
+}
+
+interface Props extends BaseLayoutProps {}
+
+import {
+  SITE_DESCRIPTION,
+  SITE_THEME_COLOR,
+  SITE_TWITTER_ID,
+  SITE_NAME,
+  SITE_OGP_URL,
+} from "../siteConfig/config.ts";
+import "ress/dist/ress.min.css";
+import type { PageTitle } from "../siteConfig/pages.ts";
+
+const { description = SITE_DESCRIPTION, title } = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="shortcut icon"
+      href="https://static.igem.wiki/common/icons/favicons/igem-2022.svg"
+    />
+    <link rel="license" href="https://creativecommons.org/licenses/by/4.0/" />
+
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- OGP (Open Graph Protocol) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={SITE_OGP_URL} />
+    <meta property="og:image:alt" content={description} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={Astro.url.href} />
+    <meta name="twitter:image" content={SITE_OGP_URL} />
+    <meta name="twitter:site" content={SITE_TWITTER_ID} />
+    <meta name="twitter:creator" content={SITE_TWITTER_ID} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={Astro.url.href} />
+
+    <!-- Additional SEO Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content={SITE_THEME_COLOR} />
+
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+<style is:global>
+  /* リセットの全体範囲をカバー */
+  * {
+    /* マージンをリセット */
+    margin: 0;
+    /* 境界線のスタイルをリセット */
+    font-family: "Hanken Grotesk", Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    line-height: 1.6;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+</style>

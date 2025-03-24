@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"ol"> {}
+
+const { ...props } = Astro.props;
+---
+
+<ol {...props} class:list={["mdx-ol"]}><slot /></ol>
+
+<style>
+  .mdx-ol {
+    padding-left: 1rem;
+  }
+</style>

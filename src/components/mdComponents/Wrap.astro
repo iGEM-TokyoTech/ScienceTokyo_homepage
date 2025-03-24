@@ -1,0 +1,13 @@
+---
+import { DummyContainerManager } from "../scripts/DummyContainer";
+
+interface Props {
+  warpId: string;
+}
+
+const { warpId } = Astro.props;
+---
+
+<div data-warp-id={warpId} class:list={[DummyContainerManager.WARP_CLASS]}>
+  <slot />
+</div>

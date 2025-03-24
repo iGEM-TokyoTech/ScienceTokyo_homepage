@@ -1,0 +1,68 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { MDXDocEnvManager } from "../scripts/MDXDocEnvManager";
+
+interface Props extends HTMLAttributes<"h2"> {}
+const props = Astro.props;
+---
+
+<h2
+  class:list={[
+    // ToCHighlighter.OBSERVED_CLASS,
+    MDXDocEnvManager.CLASSES.headings,
+    "mdx-h2",
+    props.class,
+  ]}
+  {...props}
+>
+  <slot />
+</h2>
+
+<style>
+  /* h2: h1 より少し控えめだが、まだ重要な見出し */
+  .mdx-h2 {
+  position: relative; /* 擬似要素の配置のために相対位置を指定 */
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #34495e;
+  text-align: left;
+  text-transform: none;
+  background-color: #f0fff0;
+  padding: 0.5rem;
+  border-left: 5px solid #2ecc71;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mdx-h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px; /* 下線の太さを指定 */
+  background: linear-gradient(
+    90deg,
+    #bfcd5a,
+    #0b6380,
+    #05966c,
+    #bfcd5a,
+    #0b6380
+  );
+  background-size: 400% 100%;
+  animation: gradientMove 4s linear infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+</style>
+
+

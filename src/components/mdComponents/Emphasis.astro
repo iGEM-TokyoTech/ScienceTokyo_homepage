@@ -1,0 +1,11 @@
+---
+const { ...props } = Astro.props;
+---
+
+<em {...props}><slot /></em>
+
+<style>
+  em {
+    font-weight: 500;
+  }
+</style>

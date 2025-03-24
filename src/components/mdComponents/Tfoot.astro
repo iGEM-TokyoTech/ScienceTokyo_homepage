@@ -1,0 +1,11 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"tfoot"> {}
+
+const { ...props } = Astro.props;
+---
+
+<tfoot class:list={["mdx-tfoot"]} {...props}><slot /></tfoot>
+
+<style></style>

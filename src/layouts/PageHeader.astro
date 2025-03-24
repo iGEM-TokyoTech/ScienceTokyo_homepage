@@ -1,0 +1,86 @@
+---
+import type { PageTitle } from "../siteConfig/pages";
+
+
+interface Props {
+  title: PageTitle;
+  imgSrc: string;
+}
+
+const { title, imgSrc } = Astro.props;
+---
+
+<header class:list={["page-header"]}>
+  <img class:list={["page-header-background-img"]} src= {imgSrc} />
+  <div class:list={["page-header-overlay"]}></div>
+  <!-- オーバーレイ追加 -->
+  <div class:list={["page-header-title"]}>{title}</div>
+</header>
+
+<style>
+  .page-header {
+    position: relative;
+    height: max(50vh, 500px);
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .page-header-background-img {
+    position: absolute;
+    bottom: 0;
+    left:0;
+    width: 70%;
+    height: 80%;
+    margin-top: 0;
+    margin-left: 15%;
+    object-fit: cover;
+    border-radius: 10%;
+  }
+
+  
+
+  .page-header-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 文字の影を追加 */
+    z-index: 1; /* タイトルをオーバーレイより前面に表示 */
+  }
+
+  /* メディアクエリを追加してフォントサイズを調整 */
+  @media (max-width: 1200px) {
+    .page-header-title {
+      font-size: 4rem;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .page-header-title {
+      font-size: 3.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-header-title {
+      font-size: 3rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .page-header-title {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .page-header-title {
+      font-size: 2rem;
+    }
+  }
+</style>

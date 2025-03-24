@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { MDXDocEnvManager } from "../scripts/MDXDocEnvManager";
+
+interface Props extends HTMLAttributes<"h4"> {}
+const props = Astro.props;
+---
+<h4
+  class:list={[
+    // ToCHighlighter.OBSERVED_CLASS,
+    MDXDocEnvManager.CLASSES.headings,
+    "mdx-h4",
+    props.class,
+  ]}
+  {...props}
+>
+  <slot />
+</h4>
+
+<style>
+  .mdx-h4 {
+    border-radius: 8px;
+    font-size: 1.2rem;
+    transition: background-color 0.3s cubic-bezier(0.55, 0.09, 0.68, 0.53), transform 0.3s ease;
+    position: relative;
+    cursor: default; /* カーソルをデフォルトに */
+  }
+
+</style>

@@ -1,0 +1,65 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { MDXDocEnvManager } from "../scripts/MDXDocEnvManager";
+
+interface Props extends HTMLAttributes<"h1"> {}
+const props = Astro.props;
+---
+
+<h1
+  class:list={[
+    // ToCHighlighter.OBSERVED_CLASS,
+    MDXDocEnvManager.CLASSES.headings,
+    "mdx-h1",
+    props.class,
+  ]}
+  {...props}
+>
+  <slot />
+</h1>
+
+<style>
+  /* h1: 最も重要で目を引く見出し */
+  .mdx-h1 {
+    font-size: 2rem; /* 大きくて強調されたフォントサイズ */
+    font-weight: bold; /* 太字で目立たせる */
+    color: #2c3e50; /* 濃いめの色でインパクトを与える */
+    text-align: center; /* 中央揃えで存在感を強調 */
+    letter-spacing: 0.1rem; /* わずかに文字間隔を広げ、読みやすさを向上 */
+    margin-bottom: 1rem; /* 下に余白を設けて区切りを明確に */
+  }
+
+  .mdx-h1::before {
+    content: "";
+    display: block;
+    width: 50%; /* 線の幅 */
+    height: 2px; /* 線の太さ */
+    background: linear-gradient(
+      90deg,
+      #bfcd5a,
+      #0b6380,
+      #05966c,
+      #bfcd5a,
+      #0b6380
+    ); /* 緑、青、黄色、緑のグラデーション */
+    background-size: 400% 100%; /* グラデーションのサイズを拡大 */
+    background-position: 0% 50%; /* 初期位置 */
+    margin: 0 auto 1rem; /* 中央揃えと下の余白 */
+    animation: gradientMove 4s linear infinite; /* グラデーション移動のアニメーション */
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mdx-h1::before {
+      width: 80%; /* 小さい画面では幅を広げる */
+    }
+  }
+</style>

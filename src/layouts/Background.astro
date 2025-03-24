@@ -1,0 +1,22 @@
+---
+interface Props {
+  imgSrc: string;
+}
+
+---
+
+<body>
+    <div class = {backgroundimage} src = {imageSrc}>
+        <slot />
+    </div>
+</body>
+
+<style>
+    /*.backgroundimage {
+        background-image: url('/images/Home.svg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: repeat;
+        height: 100vh;
+        width: 100%;
+    }
