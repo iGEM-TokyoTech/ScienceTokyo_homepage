@@ -6,7 +6,6 @@
 import MDXDocEnv from "../components/MDXDocEnv.astro";
 import { type BaseLayoutProps } from "./BaseLayout.astro";
 import { type MarkdownHeading } from "astro";
-import { MDXDocEnvManager } from "../components/scripts/MDXDocEnvManager";
 import PageHeader from "./PageHeader.astro";
 
 interface Props extends BaseLayoutProps {
@@ -19,7 +18,7 @@ const { headings, imgSrc, ...props } = Astro.props;
 
 <Layout headings={headings} {...props}> 
   <PageHeader title={props.title} imgSrc={imgSrc ?? ""} />
-  <MDXDocEnv class={MDXDocEnvManager.CLASSES.docenv}>
+  <MDXDocEnv>
     <slot /> 
   </MDXDocEnv>
 </Layout>

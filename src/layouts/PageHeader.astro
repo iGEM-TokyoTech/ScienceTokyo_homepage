@@ -20,28 +20,41 @@ const { title, imgSrc } = Astro.props;
 <style>
   .page-header {
     position: relative;
-    height: max(50vh, 500px);
+    height: max(40vh, 400px);
     width: 100%;
     overflow: hidden;
   }
 
   .page-header-background-img {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left:0;
     width: 70%;
-    height: 80%;
+    height: 96%;
     margin-top: 0;
     margin-left: 15%;
     object-fit: cover;
-    border-radius: 10%;
+    border-radius: 20px;
+  }
+
+  .page-header-overlay {
+    background:rgb(78, 77, 82);
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 70%;
+    height: 96%;
+    margin-top: 0;
+    margin-left: 15%;
+    border-radius: 20px;
   }
 
   
 
   .page-header-title {
     position: absolute;
-    top: 50%;
+    top: 48%;
     left: 50%;
     
     transform: translate(-50%, -50%);

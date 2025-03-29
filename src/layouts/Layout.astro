@@ -1,16 +1,15 @@
 ---
-/**
- * Propsはmarkdownで書かれたheadingsを型に指定
- */
- import type { BaseLayoutProps } from "./BaseLayout.astro";
+import type { BaseLayoutProps } from "./BaseLayout.astro";
 import type { MarkdownHeading } from "astro";
 
 import BaseLayout from "./BaseLayout.astro";
 import Footer from "./Footer.astro";
-import TocNavigation from "../components/Navigation/TocNavigation.astro";
-import HeaderNavigation from "../components/Navigation/HeaderNavigation.astro"
+
+import HeaderNav from "../components/Navigation/HeaderNav.astro"
 
 import "katex/dist/katex.min.css";
+
+import HamburgerNavigation from "../components/Navigation/HamburgerNavigation.astro";
 
 interface Props extends BaseLayoutProps {
   headings?: MarkdownHeading[];
@@ -23,7 +22,8 @@ export const navigationWidth = "200px";
 ---
 
 <BaseLayout {...props}>
-  <HeaderNavigation  pageTitle={props.title} />
+  <HeaderNav />
+  <HamburgerNavigation/>
 
   <section class="background-image">
     <div class="content">
@@ -35,19 +35,24 @@ export const navigationWidth = "200px";
 
 
 <style>
-  .content {
-    font-size: 1rem;
-    top:80px;
-    background-image:url('images/Home.svg');
-    background-size: cover;
-    background-position: center;
-  }
   
   .background-image{
-    background-image:url('images/Home.svg');
+    background-image: url('/images/Home.svg'); 
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1; 
+  }
+
+  .content {
+    font-size: 1rem;
+    top:85px;
+    z-index:1;
+    position: relative;
   }
  
   @media (max-width: 768px) {

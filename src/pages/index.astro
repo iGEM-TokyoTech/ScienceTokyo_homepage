@@ -1,14 +1,13 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import { Content, getHeadings } from "../mdContents/index.mdx"; 
-import components from "../mdContent/index.mdx"; 
+import components from "../mdContents/index.mdx"; 
 import MDXLayout from "../layouts/MDXLayout.astro";
-import Section1 from "../Home/Section1.astro";
-
-
+import A from "../components/A.astro";
 ---
 
-<Layout title = "Home">
-  <Section1/>
-</Layout>
+<MDXLayout title = "About" headings={getHeadings()} imgSrc ="/images/iGEM.jpg" >
+  <Content components={components} />
+</MDXLayout>
+
+
 

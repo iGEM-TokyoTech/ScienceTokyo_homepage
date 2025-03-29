@@ -3,29 +3,21 @@
 ---
 
 <footer>
-    <div>
+    <div class="footer-content">
       <!-- The following MUST be on every page: license information and link to the repository on gitlab.igem.org -->
       <div>
         <p>
-          <small>
-            © 2024 - Content on this site is licensed under a
-            <a
-              class="subfoot"
-              href="https://creativecommons.org/licenses/by/4.0/"
-              rel="license"
-            >
-              Creative Commons Attribution 4.0 International license
-            </a>.
+          <small class ="c" >
+            © 2024 - iGEM Science Tokyo
           </small>
         </p>
-        <p>
-          <small
-            >The repository used to create this website is available at <a
-              href="https://gitlab.igem.org/2024/tokyotech"
-              >gitlab.igem.org/2024/tokyotech</a
-            >.</small
-          >
-        </p>
+      </div>
+      <div class="social-links">
+        <a href="https://x.com/igem_tokyotech" target="_blank" rel="noopener noreferrer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
       </div>
     </div>
   </footer>
@@ -48,5 +40,40 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .c{
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .c::after {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 300%;
+      height: 1px;
+      background: rgb(164, 164, 164);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .social-links a {
+      text-decoration: none;
+    }
+
+    .social-links svg {
+      transition: transform 0.2s;
+    }
+
+    .social-links svg:hover {
+      transform: scale(1.1);
     }
   </style>

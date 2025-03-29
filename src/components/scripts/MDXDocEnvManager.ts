@@ -1,11 +1,6 @@
 import { DummyContainerManager } from "./DummyContainer";
-import { DummyFigCaption } from "./DummyFigCaption";
-import { GrantIdManager } from "./GrantIDManager";
 import { MDXDocEnvSectionizer } from "./MDXDocEnvSectionizer";
-import { PopUpManager } from "./PopUp";
-import { RefAnchorManager } from "./RefAnchor";
-import { ReferenceMarkerManager } from "./ReferenceMarkerManager";
-import { TableCaptionManager } from "./TableCaptionManager";
+
 
 export class HeadingTreeNode {
   data: HTMLHeadingElement | "root";
@@ -111,25 +106,12 @@ export class MDXDocEnvManager {
     headings: ".mdx-heading",
   };
   private docenv: HTMLElement;
-  private dummyContainers: HTMLElement[];
-  private dcm: DummyContainerManager;
-  private popUpManager: PopUpManager;
-  private marker: ReferenceMarkerManager | null = null;
-  private referenceSection: HTMLElement | null = null;
   private headings: HTMLHeadingElement[];
   private headingTree = new HeadingTreeNode("root");
   private sections: HTMLElement[] | null = null;
-  private ram: RefAnchorManager;
 
   constructor(docenv: HTMLElement) {
     this.docenv = docenv;
-    this.dummyContainers = Array.from(
-      docenv.querySelectorAll<HTMLElement>(DummyContainerManager.SELECTOR),
-    );
-
-    this.dcm = new DummyContainerManager(this);
-
-    this.popUpManager = new PopUpManager(this);
 
     this.headings = Array.from(
       docenv.querySelectorAll<HTMLHeadingElement>(
@@ -137,32 +119,12 @@ export class MDXDocEnvManager {
       ),
     );
 
-    const marker = docenv.querySelector<HTMLElement>(
-      ReferenceMarkerManager.SELECTOR,
-    );
-
-    if (marker) {
-      this.marker = new ReferenceMarkerManager(marker);
-    }
-
-    this.ram = new RefAnchorManager(this);
   }
 
   /**
    * **SHOULD** be executed before sectionizer
    */
-  public markReferenceHeading(): void {
-    console.log(this.marker);
-    this.marker?.markHeading();
-  }
 
-  setReferenceSection(refSec: HTMLElement): void {
-    if (!this.referenceSection) {
-      this.referenceSection = refSec;
-    } else {
-      console.error("refSec is already set");
-    }
-  }
 
   /**
    * this method **SHOULD** be executed after `this.analyzeDummyContainers()`
@@ -202,27 +164,6 @@ export class MDXDocEnvManager {
       throw new Error("MDXDocEnvManager.sections has already been set.");
     }
   }
-
-  public getDummyContainers(): HTMLElement[] {
-    return this.dummyContainers;
-  }
-
-  public getWarpByWarpId(warpId: string): HTMLElement | null {
-    return this.dcm.getWarpByWarpId(warpId);
-  }
-  /**
-   * set data-dummy attr for all HTMLElement in DummyContent component
-   *
-   * this method **SHOULD** be executed early.
-   */
-  analyzeDummyContainers(): void {
-    this.dcm.analyzeDummyContainers();
-  }
-
-  /**
-   * this method **SHOULD** be executed before TabID management because
-   * auto sections **SHOULD** hava tab info like other tab supported elements.
-   */
   sectionize(): void {
     const sectionizer = new MDXDocEnvSectionizer(this);
     sectionizer.sectionize();
@@ -250,24 +191,7 @@ export class MDXDocEnvManager {
       // tbody 内の最初の tr を取得して 'first' クラスを追加
     });
 
-    const tableCaptionContainers = this.docenv.querySelectorAll<HTMLElement>(
-      TableCaptionManager.SELECTOR.container,
-    );
-
-    tableCaptionContainers.forEach((container) => {
-      const manager = new TableCaptionManager(container);
-      manager.warpCaption();
-    });
-
-    this.popUpManager.popupGetWarpRef();
-    // this.popUpManager.popupWarp();
-
-    const dummyFigCaptions = this.docenv.querySelectorAll<HTMLElement>(
-      "." + DummyFigCaption.CLASS,
-    );
-    dummyFigCaptions.forEach((dfigc) => {
-      new DummyFigCaption(dfigc);
-    });
+    
   }
 
   /**
@@ -275,134 +199,6 @@ export class MDXDocEnvManager {
    *
    * we **SHOULD** be able to get access of dummy contents before DOMContentLoaded
    */
-  removeDummyContents(): void {
-    this.popUpManager.popupWarp();
-    this.dcm.removeContents();
-  }
-
-  /**
-   * expected to be  executed after DOMContentLoaded
-   */
-  removeContainers(): void {
-    this.dcm.removeContainers();
-  }
-
-  public removeDummyHeadingFromToC(tocItems: HTMLLIElement[]): void {
-    this.dcm.removeDummyHeadingFromToC(tocItems);
-  }
-
-  /**
-   * **SHOULD** be called after sectionize
-   * @returns
-   */
-  getRefrenceSection(): HTMLElement | null {
-    return this.referenceSection;
-  }
-
-  /**
-   * **SHOULD** be called after tabId
-   */
-  refAnchorSetReferenceHref(): void {
-    this.ram.setReferenceHref();
-  }
-
-  /**
-   * **SHOULD** be very early time
-   */
-  grantId(): void {
-    const granters = this.docenv.querySelectorAll<HTMLSpanElement>(
-      GrantIdManager.SELECTOR,
-    );
-
-    granters.forEach((granter) => {
-      new GrantIdManager(granter);
-    });
-  }
+  
 }
 
-export class MDXDocEnvCollection {
-  docenvs: HTMLElement[];
-  managers: MDXDocEnvManager[];
-  constructor() {
-    this.docenvs = Array.from(
-      document.querySelectorAll<HTMLElement>(MDXDocEnvManager.SELECTORS.docenv),
-    );
-
-    this.managers = this.docenvs.map((docenv) => new MDXDocEnvManager(docenv));
-  }
-
-  /**
-   * **SHOULD** be executed before sectionizer
-   */
-  markReferenceHeading(): void {
-    this.managers.forEach((manager) => manager.markReferenceHeading());
-  }
-
-  /**
-   * set data-dummy attr for all HTMLElement in DummyContent component
-   *
-   * this method **SHOULD** be executed early.
-   */
-  analyzeDummyContainers(): void {
-    this.managers.forEach((manager) => manager.analyzeDummyContainers());
-  }
-
-  /**
-   * this method **SHOULD** be executed before TabID management because
-   * auto sections **SHOULD** hava tab info like other tab supported elements.
-   */
-  sectionize(): void {
-    this.managers.forEach((manager) => manager.sectionize());
-  }
-
-  /**
-   * expected to be executed **JUST** before DOMContentLoaded
-   *
-   * we **SHOULD** be able to get access of dummy contents before DOMContentLoaded
-   */
-  removeDummyContents(): void {
-    this.managers.forEach((manager) => manager.removeDummyContents());
-  }
-
-  /**
-   * expected to be  executed after DOMContentLoaded
-   */
-  removeContainers(): void {
-    this.managers.forEach((manager) => manager.removeContainers());
-  }
-
-  removeDummyHeadingFromToC(tocs: HTMLUListElement[]): void {
-    let tocItems: HTMLLIElement[] = [];
-    tocs.forEach((toc) => {
-      tocItems = tocItems.concat(
-        Array.from(toc.querySelectorAll<HTMLLIElement>(":scope > li")),
-      );
-    });
-    this.managers.forEach((manager) => {
-      manager.removeDummyHeadingFromToC(tocItems);
-    });
-  }
-
-  /**
-   * - `mdx-table`
-   */
-  independentMDXComponentManagement(): void {
-    this.managers.forEach((manager) =>
-      manager.independentMDXComponentManagement(),
-    );
-  }
-
-  /**
-   * **SHOULD** be called after tabId
-   */
-  refAnchorSetReferenceHref(): void {
-    this.managers.forEach((manager) => manager.refAnchorSetReferenceHref());
-  }
-
-  /**
-   * **SHOULD** be very early time
-   */
-  grantId(): void {
-    this.managers.forEach((manager) => manager.grantId());
-  }
-}

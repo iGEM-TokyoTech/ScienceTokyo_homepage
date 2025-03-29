@@ -1,0 +1,9 @@
+---
+import { Content, getHeadings } from "../mdContents/blog.mdx"; 
+import components from "../mdContents/blog.mdx"; 
+import MDXLayout from "../layouts/MDXLayout.astro";
+---
+
+<MDXLayout title = "Blog" headings={getHeadings()} imgSrc ="/images/Blog_Header.jpg" >
+  <Content components={components} />
+</MDXLayout>

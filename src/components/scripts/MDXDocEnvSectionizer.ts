@@ -10,10 +10,14 @@ export class MDXDocEnvSectionizer {
     autoSection: "mdx-auto-section",
   };
 
+  static readonly DATA_ATTRS = {
+    referenceDataAttr: "reference",
+  };
+
   private dem: MDXDocEnvManager;
   private docenv: HTMLElement;
   private headings: HTMLHeadingElement[];
-  private headingTree: HeadingTreeNode = new HeadingTreeNode("root");
+  private headingTree: HeadingTreeNode;
 
   constructor(dem: MDXDocEnvManager) {
     this.dem = dem;
@@ -54,11 +58,6 @@ export class MDXDocEnvSectionizer {
         if (currentSection) {
           this.docenv.insertBefore(currentSection, child);
           sections.push(currentSection);
-
-          if (isRefSec) {
-            this.dem.setReferenceSection(currentSection);
-            isRefSec = false;
-          }
         }
 
         if (child.dataset.reference === "true") {
@@ -87,10 +86,6 @@ export class MDXDocEnvSectionizer {
     if (currentSection) {
       this.docenv.appendChild(currentSection);
       sections.push(currentSection);
-      if (isRefSec) {
-        this.dem.setReferenceSection(currentSection);
-        isRefSec = false;
-      }
     }
 
     this.dem.setDocEnvSections(sections);

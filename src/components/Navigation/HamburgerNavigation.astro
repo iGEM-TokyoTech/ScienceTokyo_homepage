@@ -1,0 +1,52 @@
+<div class="hamburger-menu" id="hamburger-menu">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/Project">Project</a></li>
+        <li><a href="/Team">Team</a></li>
+        <li><a href="/Blog">Blog</a></li>
+        <li><a href="/Contact">Contact</a></li>
+        <li><a href="/Contribution">Contribution</a></li>
+    </ul>
+</div>
+
+<style>
+    .hamburger-menu {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background-color: #f8f9fa;
+        transition: left 0.3s ease;
+        z-index: 999;
+    }
+
+    .hamburger-menu.active {
+        left: 0;
+    }
+
+    .hamburger-menu ul {
+        padding: 2rem;
+    }
+
+    .hamburger-menu ul li {
+        list-style: none;
+        margin-bottom: 1.5rem;
+    }
+
+    .hamburger-menu ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 1.2rem;
+        display: block;
+        padding: 0.5rem 0;
+    }
+</style>
+
+<script>
+    const menu = document.getElementById('hamburger-menu');
+    
+    window.addEventListener('toggleMenu', () => {
+        menu?.classList.toggle('active');
+    });
+</script>

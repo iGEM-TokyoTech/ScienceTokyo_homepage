@@ -1,0 +1,87 @@
+---
+interface Props {
+  year: number;
+  headings: string;
+  imgSrc? : string;
+}
+
+const { year, headings, imgSrc } = Astro.props;
+
+const hasImage = !!imgSrc;
+---
+
+<div class:list={["interview-card"]}>
+  <div class:list={["interview-header"]}>
+    
+    <div class = "card-headings">{headings}</div>
+    <div class = "card-headings">{year}年</div>
+  </div>
+  <div class:list={["interview-content", { "no-content": !hasImage }]}>
+    {hasImage && <iframe src={imgSrc} style="overflow: hidden;" />}
+  </div>
+</div>
+
+<style>
+  .interview-card {
+    max-width: 100%;
+    margin: 2rem auto; /* More consistent top/bottom margins */
+    padding: 1.5rem; /* Padding inside the card */
+    background-color: white; /* Card background color */
+    border-radius: 10px; /* Rounded corners for a softer feel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+  }
+
+  .interview-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0; /* Divider between header and content */
+  }
+
+  .card-headings {
+    font-weight: bold; /* Highlight the interviewees' names */
+    font-size:1.2rem;
+  }
+  
+
+  .interview-content {
+    height:400px;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+    overflow: hidden;  
+    position: relative;
+  }
+
+  .interview-content.no-content {
+    height: 0;
+    margin: 0;
+  }
+
+  .interview-content iframe {
+    width: 100%;   /* 埋め込み先のレイアウトに合わせ、要調整 */
+    height: 800px;   
+    position:absolute;
+    border-radius: 8px; /* Rounded corners for the image */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the image */
+    overflow: hidden; /* スクロールを無効化 */
+  }
+
+  @media (max-width: 768px) {
+    .interview-header {
+      grid-template-columns: 1fr; /* Stacks interviewees and belonging */
+      gap: 0.5rem;
+    }
+
+    .interview-content {
+      grid-template-columns: 1fr; /* Stacks image and content for smaller screens */
+      max-height: 40vh;
+      overflow-y: scroll;
+    }
+
+    .interview-content img {
+      max-height: 40vh;
+    }
+  }
+</style>

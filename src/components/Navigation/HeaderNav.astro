@@ -1,0 +1,118 @@
+<nav>
+    <a href = "/"><img class="logo-img" src="/images/iGEM_ScienceTokyo.png" alt = "iGEM_ScienceToky_logo" /></a>
+    <div class = "nav-item">
+        <ul>
+            <li><a href = "/">Home</a></li>
+            <li><a href = "/Project">Project</a></li>
+            <li><a href = "/Team">Team</a></li>
+            <li><a href = "/Blog">Blog</a></li>
+            <li><a href = "/Contact">Contact</a></li>
+            <li><a href = "/Contribution">Contribution</a></li>
+        </ul>
+    </div>
+    <button class="hamburger-button" id="hamburger-button">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</nav>
+
+<style>
+    nav {
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:80px;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        background-color: #f8f9fa;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-img {
+        height:80px;
+        left:0;
+    }
+
+    .nav-item ul {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .nav-item ul li {
+        list-style: none;
+        font-size:1.2rem;
+    }
+
+    .nav-item ul li a {
+        text-decoration: none;
+        color: #333;
+        position: relative; /* 修正: ::afterの基準を設定 */
+    }
+
+    .nav-item ul li a::after { /* 修正: セレクタのスペースを削除 */
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;             /* 線の太さを指定 */
+        background-color: #000;  /* 線の色を指定 */
+        transform: scaleX(0);    /* 初期状態では線を見えなくする（縮める） */
+        transform-origin: left;  /* 左端を基準に伸びる */
+        transition: transform 0.3s ease; /* 線が伸びるアニメーション */
+    }
+
+    .nav-item ul li a:hover::after {
+        transform: scaleX(1);    /* ホバー時に線を左→右へ */
+        
+    }
+
+    @media (max-width: 768px) {
+        .nav-item {
+            display: none;
+        }
+
+        .hamburger-button {
+            display: block;
+            width: 30px;
+            height: 24px;
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger-button span {
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #333;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger-button span:nth-child(1) { top: 0; }
+        .hamburger-button span:nth-child(2) { top: 11px; }
+        .hamburger-button span:nth-child(3) { top: 22px; }
+    }
+
+    @media (min-width: 769px) {
+        .hamburger-button {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const hamburgerButton = document.getElementById('hamburger-button');
+    hamburgerButton?.addEventListener('click', () => {
+        const event = new CustomEvent('toggleMenu');
+        window.dispatchEvent(event);
+    });
+</script>

@@ -1,0 +1,51 @@
+import defaultComponents from "../components/mdComponents/components.ts";
+import Card from "../components/mdComponents/Card.astro";
+import ImageCard from "../components/mdComponents/ImageCard.astro";
+import A from "../components/A.astro";
+
+export const components = defaultComponents;
+
+# iGEMについて
+<Card
+        imgSrc="/images/iGEM_Logo.jpg"
+    >
+    <p>
+        iGEMは、毎年11月ごろに開催される合成生物学を用いて社会問題の解決のための研究・貢献を競う国際大会です。
+        主に大学生や大学院生が参加し、近年では高校生のチームも増えてきました。去年はパリで開催され、2024年度は50カ国以上、400チーム以上が参加しました。
+        参加チームは独自に設計した大腸菌などの生物学的デバイスを作成し、夏の間などで実験を行いパーツを完成させます。大会では英語でのプレゼンテーションで発表を行い、最後に優秀なチームが表彰されます。
+    </p>
+    <p> 
+        その他会場にはブース出展のエリアもあり、他チームとの交流などもできます。
+        iGEMは合成生物学の教育とイノベーションを促進する場として重要な役割を果たしており、世界中の学生たちが最新の科学の進歩を共有し、社会への応用を目指して競います。
+    </p>
+</Card>
+
+# チームについて
+## About Us
+#### iGEM Science Tokyoは、合成生物学の世界大会iGEMに出場する東京科学大学の公認サークルです。
+
+
+## 学年ごとの活動紹介
+#### iGEM Science Tokyo は現在2年生4人、1年生9人の13名で活動しています。チームの中では主にWet、Dry、Human Practices の3つの班に分かれ、プロジェクトを進めています。
+#### また、iGEM Science Tokyo は2025年からプロジェクトを2カ年で進める方針に変わりました。1年次に合成生物学の知識を身に付け、2年次からプロジェクトの計画を始めて3年次で実際に実験を通して実行します。その際、実験手法は3年生の実験の手伝いというかたちで一緒に実験をすることで身につけます。
+## 班ごとの活動紹介
+<Card
+    headings = "Wet"
+    imgSrc="/images/Wet.jpg"
+    >
+    Wetは主に実験を行う班で、実際のプロジェクトで使用する系や遺伝子について調べ、作成したプロトコルを用いてお借りしている研究室で実験を行います。
+</Card>
+<Card
+    headings = "Dry"
+    imgSrc="/images/Dry.jpg"
+    >
+    Dryはモデリングやハードウェアの作成を行う班で、プロジェクトで使用するのに最適な遺伝子の算出や期待される効果の予測などをプログラミングなどを通して行います。
+</Card>
+<Card
+    headings = "Human Practice"
+    imgSrc="/images/Human_Practice.jpg"
+    >
+    Human Practices は人とのコミュニケーションを通してプロジェクトをより良いものにしたり社会実装や社会貢献に向けての活動を行う班で、専門家へのインタビューやプロジェクトの対象となる人への聞き取りのほか中高生への合成生物学のインターンを行い合成生物学について知ってもらうなど幅広い活動をしています。
+</Card>
+
+
