@@ -35,31 +35,30 @@ export const navigationWidth = "200px";
 
 
 <style>
-  
-  .background-image{
-    background-image: url('/images/Home.svg'); 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    position:absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: -1; 
-  }
-
-  .content {
-    font-size: 1rem;
-    top:85px;
-    z-index:1;
-    position: relative;
-  }
- 
-  @media (max-width: 768px) {
-    .content {
-      display: block;
-      margin-left: auto;
-      width: 100%;
+    .background-image {
+        background-image: url('/images/Home.svg'); 
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        z-index: -1;
     }
-  }
+
+    .content {
+        font-size: 1rem;
+        margin-top: 85px;
+        z-index: 1;
+        position: relative; 
+    }
+
+    @media (max-width: 768px) {
+        .content {
+            width: 100%;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+    }
 </style>

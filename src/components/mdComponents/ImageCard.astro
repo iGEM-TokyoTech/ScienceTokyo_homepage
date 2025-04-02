@@ -3,21 +3,28 @@ interface Props {
   year: number;
   headings: string;
   imgSrc? : string;
+  medal: string;
 }
 
-const { year, headings, imgSrc } = Astro.props;
+const { year, headings, imgSrc, medal } = Astro.props;
 
 const hasImage = !!imgSrc;
 ---
 
 <div class:list={["interview-card"]}>
   <div class:list={["interview-header"]}>
-    
-    <div class = "card-headings">{headings}</div>
-    <div class = "card-headings">{year}年</div>
+    <div class="card-headings">
+      <img src={medal}/>
+      {headings}
+      
+    </div>
+    <div class="card-headings">{year}年</div>
   </div>
-  <div class:list={["interview-content", { "no-content": !hasImage }]}>
-    {hasImage && <iframe src={imgSrc} style="overflow: hidden;" />}
+  <div class:list={["interview-content", { "full-width": !hasImage }]}>
+    {hasImage && <div class="image-container"><img src={imgSrc} style="overflow: hidden;" /></div>}
+    <div class="slot-content">
+      <slot/>
+    </div>
   </div>
 </div>
 
@@ -33,6 +40,7 @@ const hasImage = !!imgSrc;
 
   .interview-header {
     display: grid;
+    height:100%;
     grid-template-columns: 2fr 1fr;
     gap: 1rem;
     padding-bottom: 1rem;
@@ -43,29 +51,50 @@ const hasImage = !!imgSrc;
     font-weight: bold; /* Highlight the interviewees' names */
     font-size:1.2rem;
   }
+  .card-headings img {
+    height: 1.5rem;
+    margin-left: 1rem;
+    margin-right:0.5rem;
+  }
   
 
   .interview-content {
-    height:400px;
-    gap: 1rem;
-    align-items: center;
+    height: 100%;
     margin-top: 1rem;
-    overflow: hidden;  
-    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1rem;
+    width: 100%;
   }
 
-  .interview-content.no-content {
-    height: 0;
-    margin: 0;
+  .interview-content.full-width {
+    grid-template-columns: 1fr;
+    max-width: 100%;
   }
 
-  .interview-content iframe {
-    width: 100%;   /* 埋め込み先のレイアウトに合わせ、要調整 */
-    height: 800px;   
-    position:absolute;
-    border-radius: 8px; /* Rounded corners for the image */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the image */
-    overflow: hidden; /* スクロールを無効化 */
+  .interview-content.full-width .slot-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .image-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-container img {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .slot-content {
+    width: 100%;
   }
 
   @media (max-width: 768px) {
@@ -75,9 +104,7 @@ const hasImage = !!imgSrc;
     }
 
     .interview-content {
-      grid-template-columns: 1fr; /* Stacks image and content for smaller screens */
-      max-height: 40vh;
-      overflow-y: scroll;
+      grid-template-columns: 1fr;
     }
 
     .interview-content img {

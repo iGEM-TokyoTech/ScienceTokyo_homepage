@@ -19,11 +19,12 @@
 
 <style>
     nav {
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:80px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 80px;
         z-index: 1000;
         display: flex;
         justify-content: space-between;
@@ -31,6 +32,7 @@
         padding: 1rem 5%;
         background-color: #f8f9fa;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
     }
 
     .logo-img {
@@ -85,6 +87,9 @@
             background: none;
             border: none;
             cursor: pointer;
+            padding: 0;
+            margin: 0;
+            z-index: 1001;
         }
 
         .hamburger-button span {
@@ -95,11 +100,26 @@
             background-color: #333;
             border-radius: 2px;
             transition: all 0.3s;
+            transform-origin: center;
         }
 
         .hamburger-button span:nth-child(1) { top: 0; }
         .hamburger-button span:nth-child(2) { top: 11px; }
         .hamburger-button span:nth-child(3) { top: 22px; }
+
+        .hamburger-button.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 11px;
+        }
+
+        .hamburger-button.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-button.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 11px;
+        }
     }
 
     @media (min-width: 769px) {
@@ -112,6 +132,7 @@
 <script>
     const hamburgerButton = document.getElementById('hamburger-button');
     hamburgerButton?.addEventListener('click', () => {
+        hamburgerButton.classList.toggle('active');
         const event = new CustomEvent('toggleMenu');
         window.dispatchEvent(event);
     });

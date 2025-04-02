@@ -7,49 +7,6 @@ interface Props {
 
 const { headings, imgSrc } = Astro.props;
 
-const createStringGroups = (strings: string[] | string): string[][] => {
-  if (strings instanceof Array) {
-    const result: string[][] = [];
-    let currentGroup: string[] = [];
-    let currentLength = 0;
-
-    for (const str of strings) {
-      const strLength = str.length;
-
-      // もし単体で 30 文字以上ならその文字列単体でグループ化
-      if (strLength > 30) {
-        if (currentGroup.length > 0) {
-          // 現在のグループを結果に追加
-          result.push(currentGroup);
-          currentGroup = [];
-          currentLength = 0;
-        }
-        result.push([str]); // 単体で新しいグループとして追加
-      } else {
-        // 現在のグループに追加可能か確認
-        if (currentLength + strLength > 30) {
-          // 現在のグループを結果に追加して新しいグループを作成
-          result.push(currentGroup);
-          currentGroup = [str];
-          currentLength = strLength;
-        } else {
-          // 現在のグループに追加
-          currentGroup.push(str);
-          currentLength += strLength;
-        }
-      }
-    }
-
-    // 最後のグループがあれば結果に追加
-    if (currentGroup.length > 0) {
-      result.push(currentGroup);
-    }
-
-    return result;
-  } else {
-    return [[strings]];
-  }
-};
 
 
 ---

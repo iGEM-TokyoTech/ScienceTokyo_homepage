@@ -89,11 +89,16 @@ const { title, imgSrc } = Astro.props;
     .page-header-title {
       font-size: 2.5rem;
     }
+    .page-header {
+      height: max(25vh, 250px);
+    }
   }
 
   @media (max-width: 400px) {
     .page-header-title {
       font-size: 2rem;
     }
+
+    
   }
 </style>
