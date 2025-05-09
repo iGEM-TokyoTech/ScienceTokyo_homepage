@@ -25,11 +25,17 @@ import {
 } from "../siteConfig/config.ts";
 import "ress/dist/ress.min.css";
 import type { PageTitle } from "../siteConfig/pages.ts";
+import { SEO } from "astro-seo"
 
 const { description = SITE_DESCRIPTION, title } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 ---
+
+<!-- SEO設定 -->
+const title = "iGEM Science Tokyo"
+const description = "iGEM Science Tokyo は東京科学大学の公認サークルとして、合成生物学を用いた社会課題解決を目指し国際大会iGEMに挑戦する学生チームです。研究内容、チーム体制、最新成果を発信しております。"
+const 
 
 <!doctype html>
 <html lang="ja">
@@ -72,6 +78,30 @@ const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <meta name="theme-color" content={SITE_THEME_COLOR} />
 
     <title>{pageTitle}</title>
+
+    <!-- SEO Contents -->
+    <SEO
+    title={title}
+    description={description}
+    openGraph={{
+      basic: {
+        type: 'website',
+        title,
+        image: SITE_OGP_URL,
+        url: 'https://igemsciencetokyo.com',
+      },
+      optional: {
+        description,
+      },
+    }}
+    twitter={{
+      card: 'summary_large_image',
+      site: '@igem_tokyotech',
+      title,
+      description,
+    }}
+  />
+
   </head>
   <body>
     <slot />
