@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"ul"> {}
+
+const { ...props } = Astro.props;
+---
+
+<ul {...props} class:list={["mdx-ul"]}><slot /></ul>
+
+<style>
+  .mdx-ul {
+    padding-left: 1rem;
+  }
+</style>

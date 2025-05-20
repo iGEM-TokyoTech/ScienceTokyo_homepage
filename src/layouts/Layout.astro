@@ -43,22 +43,28 @@ export const navigationWidth = "200px";
         position: absolute;
         top: 0;
         left: 0;
-        width: 100vw;
+        width: 100%;
+        min-height: 100vh;
         z-index: -1;
+        margin: 0;
+        padding: 0;
     }
 
     .content {
         font-size: 1rem;
         margin-top: 85px;
         z-index: 1;
-        position: relative; 
+        position: relative;
+        min-height: calc(100vh - 85px);
+        width: 100%;
     }
 
     @media (max-width: 768px) {
         .content {
             width: 100%;
-            padding: 0 15px;
+            padding: 0 10px;
             box-sizing: border-box;
+            margin-right: 0;
         }
     }
 </style>

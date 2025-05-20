@@ -1,0 +1,113 @@
+---
+
+import type { MarkdownHeading } from "astro";
+import { type TabHeading } from "./Navigation.astro";
+import { Dropdown } from "../scripts/Dropdown";
+
+/**
+ * componnents import
+ */
+import ToC from "../ToC/ToC.astro";
+
+interface Props {
+  pageTitle: PageTitle;
+  entry: CategoricalPagesConfigEntry;
+  isDefaultEntry?: boolean;
+  headings?: MarkdownHeading[];
+  tabHeadings?: TabHeading[];
+  class?: string[] | string;
+}
+
+const {
+  pageTitle,
+  entry,
+  isDefaultEntry,
+  headings,
+  tabHeadings,
+  class: className,
+} = Astro.props;
+
+const classList = className
+  ? className instanceof Array
+    ? className
+    : [className]
+  : undefined;
+---
+
+<li
+  class:list={Array.prototype.concat(
+    [Dropdown.CLASSES.container, "dropdown"],
+    classList,
+  )}
+  data-default-page={isDefaultEntry ? "true" : "false"}
+>
+ 
+
+  <ul class:list={[Dropdown.CLASSES.menu, "dropdown-menu"]}>
+    {
+      entry.subPages.map((subPage) => (
+        <li class:list={[Dropdown.CLASSES.item, "dropdown-item"]}>
+        
+          {(headings && pageTitle === subPage.title && (
+            <ToC headings={headings} />
+          )) }
+        </li>
+      ))
+    }
+  </ul>
+</li>
+
+<style>
+  /* ドロップダウンメニューの初期状態は非表示 */
+  .dropdown-menu {
+    /*display: none; */
+    padding-left: 1rem;
+    gap: 0.1rem;
+  }
+
+  /* .show クラスが追加された場合に表示 */
+  .dropdown.show .dropdown-menu {
+    display: block;
+  }
+/*.dropdownの最初の"・"を非表示*/
+  .dropdown-item {
+    list-style: none;
+  }
+
+  /* dropdown-itemのリンクをスタイル */
+  .dropdown-item a {
+    display: block;
+  }
+
+  /* ドロップダウンアイテムをホバーしたときのスタイル */
+  .dropdown-item a:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* ドロップダウンリストのスタイル */
+  .dropdown {
+  }
+
+  
+  .dropdown-toggle {
+    cursor: pointer;
+  }
+
+  /**
+  矢印の回転など
+  */
+  .arrow-wrapper {
+    display: flex;
+    align-items: center;
+    transition: transform 0.1s ease-in-out; /* Smooth rotation */
+  }
+  /* Rotate the arrow when the dropdown is open */
+  .dropdown.show .arrow-wrapper {
+    transform: rotate(90deg);
+  }
+
+  /* Reset rotation when dropdown is closed */
+  .arrow-wrapper {
+    transform: rotate(0deg); /* Initial state */
+  }
+</style>

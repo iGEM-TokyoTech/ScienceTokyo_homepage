@@ -1,9 +1,118 @@
 ---
-import { Content, getHeadings } from "../mdContents/blog.mdx"; 
-import components from "../mdContents/blog.mdx"; 
+
 import MDXLayout from "../layouts/MDXLayout.astro";
+import A from "../components/A.astro";
+import H1 from "../components/mdComponents/H1.astro";
+
+const allPosts = await Astro.glob("../pages/posts/*.mdx");
+
 ---
 
-<MDXLayout title = "Blog" headings={getHeadings()} imgSrc ="/images/Blog_Header.jpg" >
-  <Content components={components} />
+<MDXLayout title = "Blog"  imgSrc ="/images/Blog_Header.jpg" >
+  <H1>2024以前のブログ</H1>
+  <p>2024以前のブログは<a href="https://www.igemtokyotech.org/post/">こちら</a></p>
+  <div class="blog-box">
+
+    
+  </div>
+  <div class="posts-grid">
+    {allPosts.map((post) => (
+    <article class="posts-card" key={post.url}>
+      <A class="posts-a" href={post.url}>
+        <div class="posts-header">
+          <span class="posts-category">{post.frontmatter.category ?? 'Blog'}</span>
+          <div class="posts-category-line"></div>
+        </div>
+        <div>
+          {post.frontmatter.image && (
+            <img src={post.frontmatter.image} alt={post.frontmatter.title} loading="lazy" />
+          )}
+          <h2 class="posts-title">{post.frontmatter.title}</h2>
+        </div>
+        <div class="posts-tags">
+          {(post.frontmatter.tags ?? []).map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+        <div class="posts-meta">
+          <span class="posts-date">🖊 {post.frontmatter.date ?? '日付不明'}</span>
+        </div>
+      </A>
+    </article>
+    ))}
+  </div>
 </MDXLayout>
+
+<style>
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.posts-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+.posts-a{
+  display:block;
+  width: 100%;
+  height: 100%;
+  margin:0 auto;
+}
+.posts-card:hover {
+  transform: translateY(-5px);
+}
+
+.posts-header {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.posts-category {
+  font-weight: bold;
+  color: #000000;
+  background: #edecec;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.posts-category-line {
+  content: "";
+  display: block;
+  width: 100%; /* 線の幅 */
+  margin-top: 2%;
+  height: 1px; /* 線の太さ */
+  background: rgb(216, 216, 216);
+  background-position: 100% 50%; /* 初期位置 */
+}
+
+.posts-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.posts-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.tag {
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  color: #333;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.posts-meta {
+  font-size: 0.8rem;
+  color: #666;
+}
+</style>

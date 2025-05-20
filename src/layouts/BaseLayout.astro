@@ -78,11 +78,10 @@ const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
   </body>
 </html>
 <style is:global>
-  /* リセットの全体範囲をカバー */
   * {
-    /* マージンをリセット */
     margin: 0;
-    /* 境界線のスタイルをリセット */
+    padding: 0;
+    box-sizing: border-box;
     font-family: "Hanken Grotesk", Arial, Helvetica, sans-serif;
     font-weight: normal;
     line-height: 1.6;
@@ -90,11 +89,14 @@ const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 
   html {
     scroll-behavior: smooth;
+    min-height: 100%;
   }
 
   html,
   body {
     width: 100%;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
   }
 </style>
