@@ -10,7 +10,7 @@ import ToC from "../components/ToC/ToC.astro";
 
 
 interface Props extends BaseLayoutProps {
-  headings?: MarkdownHeading[];
+  headings: MarkdownHeading[];
   frontmatter: {
     title: string;
     imgSrc?: string;
@@ -24,41 +24,113 @@ const { frontmatter, headings, ...props } = Astro.props;
 ---
 
 <Layout headings={headings} {...props}> 
-  <ToC headings={headings ?? []} />
-  <MDXDocEnv>
-    <div class ="post-card">
-      <div class="post-header">
-        <img class="post-header-background-img" src={frontmatter.imgSrc ?? ""} />
-      </div>
-      <div class="post-header-contents">
-        <h1 class="post-header-title">{frontmatter.title}</h1>
-        <p class="post-header-description">{frontmatter.description}</p>
-        <div class="post-header-tags">
-          {(frontmatter.tags ?? []).map(tag => (
-            <span class="tag">{tag}</span>
-          ))}
+  <ToC headings={headings} />
+    <MDXDocEnv>
+      <div class="post-wrapper">
+        <div class="post-card">
+          <div class="post-header">
+            <img class="post-header-background-img" src={frontmatter.imgSrc ?? ""} />
+          </div>
+          <div class="post-header-contents">
+            <h1 class="post-header-title">{frontmatter.title}</h1>
+            <p class="post-header-description">{frontmatter.description}</p>
+            <div class="post-header-tags">
+              {(frontmatter.tags ?? []).map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+            <div class="post-header-meta">
+              <span class="post-header-date">🖊 {frontmatter.date ?? '日付不明'}</span>
+            </div>
+          </div>
+          <slot /> 
         </div>
-        <div class="post-header-meta">
-          <span class="post-header-date">🖊 {frontmatter.date ?? '日付不明'}</span>
-        </div>
       </div>
-      <slot /> 
-    </div>
-  </MDXDocEnv>
+    </MDXDocEnv>
 </Layout>
+
+<!-- 旧スクリプト部分は削除 -->
+<script is:inline>
+  // スクロール付き目次リンクのクリックイベント
+  document.addEventListener("DOMContentLoaded", () => {
+    // 目次のリンクを取得
+    const tocLinks = document.querySelectorAll('.toc a');
+
+    // 各リンクにクリックイベントを追加
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); // デフォルトの動作をキャンセル
+
+        // href属性から対象のIDを取得
+        const targetId = link.getAttribute('href')?.replace('#', '');
+        if (!targetId) return;
+
+        // 対象の要素を取得
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) return;
+
+        // スムーズスクロール（80pxヘッダー分をオフセット）
+        const y = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: y, behavior: "smooth" });
+        history.replaceState(null, "", "#" + targetId);
+      });
+    });
+
+    // 見出しの監視・目次ハイライト（簡易例）
+    const headings = document.querySelectorAll("h1, h2");
+    const tocItems = document.querySelectorAll(".toc li");
+
+    const observer = new IntersectionObserver((entries) => {
+      let visibleEntry = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0) {
+          visibleEntry = entry;
+        }
+      });
+      if (visibleEntry) {
+        const id = visibleEntry.target.id;
+        tocItems.forEach(i => i.classList.remove("highlighted"));
+        const active = document.querySelector(`.toc li[data-slug="${id}"]`);
+        if (active) {
+          active.classList.add("highlighted");
+        }
+      }
+    }, { rootMargin: "0px 0px -60% 0px", threshold: 0.1 });
+
+    headings.forEach(h => observer.observe(h));
+  });
+</script>
+
 
 
 <style>
+  .post-wrapper {
+    width: 100%;
+    height:auto;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 0;
+    margin-right: 0;
+  }
+
   .post-card {
     position: relative;
-    width: 100%;
+    width: 90%; /* ToCの幅を考慮 */
     border-radius: 0.5rem;
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin: 1rem 0;
     padding: 1rem;
     transition: transform 0.2s ease;
+    margin-right: 0;
   }
+
+  /* レスポンシブ対応 */
+  @media (max-width: 768px) {
+    .post-card {
+      width: 100%;
+    }
+  }
+
   .post-header {
     position: relative;
     width: 100%;
@@ -78,7 +150,6 @@ const { frontmatter, headings, ...props } = Astro.props;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -116,4 +187,10 @@ const { frontmatter, headings, ...props } = Astro.props;
     margin-left: 0.5rem;
   }
   
+  /* スムーズスクロールのための設定 */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
 

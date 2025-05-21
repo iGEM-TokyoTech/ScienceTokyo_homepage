@@ -114,10 +114,18 @@ class DummyContainer {
 }
 
 export class DummyContainerManager {
+  private dem: MDXDocEnvManager;
   private containers: DummyContainer[] = [];
   static readonly CLASS = "__dummy-content";
   static readonly SELECTOR = ".__dummy-content";
   static readonly WARP_CLASS = "__warp";
+
+  constructor(dem: MDXDocEnvManager) {
+    this.dem = dem;
+    this.containers = dem
+      .getDummyContainers()
+      .map((container) => new DummyContainer(container));
+  }
 
  
 

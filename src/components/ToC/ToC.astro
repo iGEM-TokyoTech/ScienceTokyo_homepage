@@ -4,7 +4,6 @@
  * markdownのheadingと目次のheadingの連携
  */
 import { type MarkdownHeading } from "astro";
-import { ToCHighlighter } from "../scripts/1tocHighlighter";
 
 import A from "../A.astro";
 import type { HTMLAttributes } from "astro/types";
@@ -15,29 +14,64 @@ export interface ToCUIProps extends HTMLAttributes<"ul"> {
 
 type Props = ToCUIProps;
 
+
 const { headings, ...props } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
+
+function genToCItemId(slug: string): string {
+    return `toc-${slug}`;
+  }
 ---
 
 <ul class={props.class} class:list={["toc"]} {...props}>
   {
-    headings.map((heading) => {
-      switch (heading.depth) {
-        // contents of h1 are displayed
-        case 1:
-          return (
-            <li
-              class="depth1"
-              id={ToCHighlighter.genToCItemId(heading.slug)}
-              data-slug={heading.slug}
-            >
-              <A href={"#" + heading.slug}>{heading.text}</A>
-            </li>
-          );
-        default:
-      }
+    filteredHeadings.map((heading) => {
+      return (
+        <li
+          class={`depth${heading.depth} ${heading.depth === 1 ? 'h1-item' : 'h2-item'}`}
+          id={genToCItemId(heading.slug)}
+          data-slug={heading.slug}
+        >
+          <A href={"#" + heading.slug}>{heading.text}</A>
+        </li>
+      );
     })
   }
 </ul>
+
+
+<script is:inline>
+  function observeHeadings() {
+    // IntersectionObserver で見出しに応じて .toc li の highlight 切替
+    const headings = document.querySelectorAll("h1, h2");
+    const tocItems = document.querySelectorAll(".toc li");
+    let prevActive = null;
+
+    const observer = new IntersectionObserver((entries) => {
+      let visibleEntry = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0) {
+          visibleEntry = entry;
+        }
+      });
+      if (visibleEntry) {
+        const id = visibleEntry.target.id;
+        tocItems.forEach(i => i.classList.remove("highlighted"));
+        const active = document.querySelector(`.toc li[data-slug="${id}"]`);
+        if (active) {
+          active.classList.add("highlighted");
+          prevActive = active;
+        }
+      }
+    }, { rootMargin: "0px 0px -60% 0px", threshold: 0.1 });
+
+    headings.forEach(h => observer.observe(h));
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    observeHeadings();
+  });
+</script>
 
 <style>
   /* カラー変数の定義 */
@@ -68,13 +102,15 @@ const { headings, ...props } = Astro.props;
     box-shadow: var(--toc-box-shadow); /* シャドウ */
     padding: var(--toc-padding); /* パディング */
     list-style: none; /* デフォルトのリストスタイルを無効化 */
-    max-width: 200px; /* 最大幅 */
+    max-width: 300px; /* 最大幅 */
     font-family: var(--toc-font-family); /* フォント */
     transition: var(--toc-transition); /* トランジション */
     color: var(--toc-text-color); /* 文字色 */
     position:fixed;
     top: 30vh; /* 上からの位置 */
     left: 1%; /* 右からの位置 */
+    border-left: 2px solid #d1e7dd;
+    
   }
 
   /* トゥートゥールが不可視の場合のスタイル */
@@ -87,6 +123,25 @@ const { headings, ...props } = Astro.props;
     margin-bottom: 0.75rem; /* アイテム間のスペース */
     position: relative; /* アイコンの位置調整 */
     transition: transform 0.3s ease; /* トランジション */
+    padding-left: 1.5rem;
+  }
+
+  .toc li::before {
+  content: "";
+  position: absolute;
+  left: -0.65rem;
+  top: 0.4rem;
+  width: 8px;
+  height: 8px;
+  background-color: #cfe2ff;
+  border-radius: 50%;
+  z-index: 1;
+  transition: background-color 0.3s ease;
+ }
+ .toc li.highlighted::before {
+  width: 12px;
+  height: 12px;
+  background-color: #0d6efd;
   }
 
   /* リンクのスタイル */
@@ -103,6 +158,11 @@ const { headings, ...props } = Astro.props;
   .toc a:hover {
     color: var(--toc-link-hover-color); /* ホバー時の文字色 */
     transform: translateX(5px); /* ホバー時に少し右に移動 */
+  }
+  .toc .h2-item {
+  font-size: 0.95rem;
+  color: #555;
+  margin-left: 1rem;
   }
 
 /* depth1クラスにposition: relativeを追加 */
@@ -123,11 +183,6 @@ const { headings, ...props } = Astro.props;
   transition: width 0.3s ease; /* 幅のトランジション */
 }
 
-/* ハイライトされたときのスタイル */
-.toc .depth1.highlighted::before {
-  width: 4px; /* ボーダーの最終的な幅 */
-}
-
 /* 必要に応じてpadding-leftを調整 */
 .depth1.highlighted {
   padding-left: calc(0.75rem + 4px); /* ボーダーの幅を考慮 */
@@ -146,11 +201,5 @@ const { headings, ...props } = Astro.props;
   }
 </style>
 
-<script type="module">
-  // 先頭のスラッシュを付けない = Vite が解決可能な “相対”/“エイリアス” import
-  import { ToCHighlighter } from "../scripts/ToCHighlighter.ts";
 
-  window.addEventListener("DOMContentLoaded", () => {
-    ToCHighlighter.observeHeadings();
-  });
-</script>
+

@@ -27,6 +27,7 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
           {post.frontmatter.image && (
             <img src={post.frontmatter.image} alt={post.frontmatter.title} loading="lazy" />
           )}
+          <div class="posts-category-line"></div>
           <h2 class="posts-title">{post.frontmatter.title}</h2>
         </div>
         <div class="posts-tags">
@@ -67,6 +68,12 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
 .posts-card:hover {
   transform: translateY(-5px);
 }
+img {
+  margin-top:0.5rem;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
 
 .posts-header {
   font-size: 0.9rem;
@@ -85,7 +92,7 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
   content: "";
   display: block;
   width: 100%; /* 線の幅 */
-  margin-top: 2%;
+  margin-top: 0.5%;
   height: 1px; /* 線の太さ */
   background: rgb(216, 216, 216);
   background-position: 100% 50%; /* 初期位置 */

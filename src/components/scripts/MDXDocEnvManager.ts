@@ -1,6 +1,7 @@
 import { DummyContainerManager } from "./DummyContainer";
 import { MDXDocEnvSectionizer } from "./MDXDocEnvSectionizer";
-
+import { ReferenceMarkerManager } from "./ReferenceMarkerManager";
+import { GrantIdManager } from "./GrantIdManager";
 
 export class HeadingTreeNode {
   data: HTMLHeadingElement | "root";
@@ -105,13 +106,22 @@ export class MDXDocEnvManager {
     docenv: ".mdx-docenv",
     headings: ".mdx-heading",
   };
+  private dcm: DummyContainerManager;
+  private dummyContainers: HTMLElement[];
   private docenv: HTMLElement;
   private headings: HTMLHeadingElement[];
   private headingTree = new HeadingTreeNode("root");
   private sections: HTMLElement[] | null = null;
+  private marker: ReferenceMarkerManager | null = null;
+
 
   constructor(docenv: HTMLElement) {
     this.docenv = docenv;
+    this.dummyContainers = Array.from(
+      docenv.querySelectorAll<HTMLElement>(DummyContainerManager.SELECTOR),
+    );
+
+    this.dcm = new DummyContainerManager(this);
 
     this.headings = Array.from(
       docenv.querySelectorAll<HTMLHeadingElement>(
@@ -119,11 +129,30 @@ export class MDXDocEnvManager {
       ),
     );
 
+    const marker = docenv.querySelector<HTMLElement>(
+      ReferenceMarkerManager.SELECTOR,
+    );
+
+    if (marker) {
+      this.marker = new ReferenceMarkerManager(marker);
+    }
+  }
+
+  public getDummyContainers(): HTMLElement[] {
+    return this.dummyContainers;
   }
 
   /**
    * **SHOULD** be executed before sectionizer
    */
+    public markReferenceHeading(): void {
+    console.log(this.marker);
+    this.marker?.markHeading();
+  }
+
+  public removeDummyHeadingFromToC(tocItems: HTMLLIElement[]): void {
+    this.dcm.removeDummyHeadingFromToC(tocItems);
+  }
 
 
   /**
@@ -190,15 +219,67 @@ export class MDXDocEnvManager {
       }
       // tbody 内の最初の tr を取得して 'first' クラスを追加
     });
+  }
+  
+  removeDummyContents(): void {
+    this.dcm.removeContents();
+  }
+  
+  removeContainers(): void {
+    this.dcm.removeContainers();
+  }
+  grantId(): void {
+    const granters = this.docenv.querySelectorAll<HTMLSpanElement>(
+      GrantIdManager.SELECTOR,
+    );
+    granters.forEach((granter) => {
+      new GrantIdManager(granter);
+    });
+  }
+}
 
-    
+
+export class MDXDocEnvCollection {
+docenvs: HTMLElement[];
+managers: MDXDocEnvManager[];
+
+constructor() {
+  this.docenvs = Array.from(
+    document.querySelectorAll<HTMLElement>(MDXDocEnvManager.SELECTORS.docenv)
+  );
+  this.managers = this.docenvs.map((docenv) => new MDXDocEnvManager(docenv));
+}
+
+/** 見出しに目次用マークを付ける */
+markReferenceHeading(): void {
+  this.managers.forEach((manager) => manager.markReferenceHeading());
+}
+
+/** ダミー見出しを ToC から削除 */
+removeDummyHeadingFromToC(tocs: HTMLUListElement[]): void {
+  let tocItems: HTMLLIElement[] = [];
+  tocs.forEach((toc) => {
+    tocItems = tocItems.concat(
+      Array.from(toc.querySelectorAll<HTMLLIElement>(":scope > li"))
+    );
+  });
+  this.managers.forEach((manager) => {
+    manager.removeDummyHeadingFromToC(tocItems);
+  });
+}
+removeContainers(): void {
+    this.managers.forEach((manager) => manager.removeContainers());
   }
 
-  /**
-   * expected to be executed **JUST** before DOMContentLoaded
-   *
-   * we **SHOULD** be able to get access of dummy contents before DOMContentLoaded
-   */
-  
+/** 各見出しにユニーク ID を付与（ToCのリンク先） */
+grantId(): void {
+  this.managers.forEach((manager) => manager.grantId());
 }
+}
+
+/**
+ * expected to be executed **JUST** before DOMContentLoaded
+ *
+ * we **SHOULD** be able to get access of dummy contents before DOMContentLoaded
+ */
 
