@@ -1,18 +1,13 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { MDXDocEnvManager } from "../scripts/MDXDocEnvManager";
+
 
 interface Props extends HTMLAttributes<"h1"> {}
 const props = Astro.props;
 ---
 
 <h1
-  class:list={[
-    // ToCHighlighter.OBSERVED_CLASS,
-    MDXDocEnvManager.CLASSES.headings,
-    "mdx-h1",
-    props.class,
-  ]}
+  class="mdx-h1"
   {...props}
 >
   <slot />

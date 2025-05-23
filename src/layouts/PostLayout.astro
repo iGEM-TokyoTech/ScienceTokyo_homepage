@@ -49,58 +49,6 @@ const { frontmatter, headings, ...props } = Astro.props;
     </MDXDocEnv>
 </Layout>
 
-<!-- 旧スクリプト部分は削除 -->
-<script is:inline>
-  // スクロール付き目次リンクのクリックイベント
-  document.addEventListener("DOMContentLoaded", () => {
-    // 目次のリンクを取得
-    const tocLinks = document.querySelectorAll('.toc a');
-
-    // 各リンクにクリックイベントを追加
-    tocLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault(); // デフォルトの動作をキャンセル
-
-        // href属性から対象のIDを取得
-        const targetId = link.getAttribute('href')?.replace('#', '');
-        if (!targetId) return;
-
-        // 対象の要素を取得
-        const targetElement = document.getElementById(targetId);
-        if (!targetElement) return;
-
-        // スムーズスクロール（80pxヘッダー分をオフセット）
-        const y = targetElement.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: y, behavior: "smooth" });
-        history.replaceState(null, "", "#" + targetId);
-      });
-    });
-
-    // 見出しの監視・目次ハイライト（簡易例）
-    const headings = document.querySelectorAll("h1, h2");
-    const tocItems = document.querySelectorAll(".toc li");
-
-    const observer = new IntersectionObserver((entries) => {
-      let visibleEntry = null;
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0) {
-          visibleEntry = entry;
-        }
-      });
-      if (visibleEntry) {
-        const id = visibleEntry.target.id;
-        tocItems.forEach(i => i.classList.remove("highlighted"));
-        const active = document.querySelector(`.toc li[data-slug="${id}"]`);
-        if (active) {
-          active.classList.add("highlighted");
-        }
-      }
-    }, { rootMargin: "0px 0px -60% 0px", threshold: 0.1 });
-
-    headings.forEach(h => observer.observe(h));
-  });
-</script>
-
 
 
 <style>

@@ -14,7 +14,7 @@ const { href, class: className, ...restProps } = Astro.props;
   <div class="overlink"></div>
 </a>
 
-<!-- 注意: import は Astro の <script type="module"> でOK！ -->
+
 <script is:inline>
   function scrollToAnchor(href, offset = 80) {
     if (!href.startsWith("#")) return;

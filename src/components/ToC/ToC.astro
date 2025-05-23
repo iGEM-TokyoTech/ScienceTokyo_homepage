@@ -17,10 +17,6 @@ type Props = ToCUIProps;
 
 const { headings, ...props } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
-
-function genToCItemId(slug: string): string {
-    return `toc-${slug}`;
-  }
 ---
 
 <ul class={props.class} class:list={["toc"]} {...props}>
@@ -29,7 +25,7 @@ function genToCItemId(slug: string): string {
       return (
         <li
           class={`depth${heading.depth} ${heading.depth === 1 ? 'h1-item' : 'h2-item'}`}
-          id={genToCItemId(heading.slug)}
+          
           data-slug={heading.slug}
         >
           <A href={"#" + heading.slug}>{heading.text}</A>
@@ -40,38 +36,6 @@ function genToCItemId(slug: string): string {
 </ul>
 
 
-<script is:inline>
-  function observeHeadings() {
-    // IntersectionObserver で見出しに応じて .toc li の highlight 切替
-    const headings = document.querySelectorAll("h1, h2");
-    const tocItems = document.querySelectorAll(".toc li");
-    let prevActive = null;
-
-    const observer = new IntersectionObserver((entries) => {
-      let visibleEntry = null;
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0) {
-          visibleEntry = entry;
-        }
-      });
-      if (visibleEntry) {
-        const id = visibleEntry.target.id;
-        tocItems.forEach(i => i.classList.remove("highlighted"));
-        const active = document.querySelector(`.toc li[data-slug="${id}"]`);
-        if (active) {
-          active.classList.add("highlighted");
-          prevActive = active;
-        }
-      }
-    }, { rootMargin: "0px 0px -60% 0px", threshold: 0.1 });
-
-    headings.forEach(h => observer.observe(h));
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    observeHeadings();
-  });
-</script>
 
 <style>
   /* カラー変数の定義 */
