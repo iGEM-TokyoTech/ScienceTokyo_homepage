@@ -20,6 +20,7 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
 ---
 
 <ul class={props.class} class:list={["toc"]} {...props}>
+  <p class="toc-title">目次</p>
   {
     filteredHeadings.map((heading) => {
       return (
@@ -34,6 +35,13 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
     })
   }
 </ul>
+
+<script>
+  import { AScroll } from '../scripts/AScroll.ts';
+  AScroll('.toc a[href^="#"]', 80);
+  import { ToCHighlighter } from '../scripts/ToCHighlighter.ts';
+  ToCHighlighter();
+</script>
 
 
 
@@ -66,7 +74,7 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
     box-shadow: var(--toc-box-shadow); /* シャドウ */
     padding: var(--toc-padding); /* パディング */
     list-style: none; /* デフォルトのリストスタイルを無効化 */
-    max-width: 300px; /* 最大幅 */
+    width: 200px; /* 最大幅 */
     font-family: var(--toc-font-family); /* フォント */
     transition: var(--toc-transition); /* トランジション */
     color: var(--toc-text-color); /* 文字色 */
@@ -75,6 +83,13 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
     left: 1%; /* 右からの位置 */
     border-left: 2px solid #d1e7dd;
     
+  }
+  .toc-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--toc-text-color);
+    text-align: center;
   }
 
   /* トゥートゥールが不可視の場合のスタイル */
@@ -105,7 +120,7 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
  .toc li.highlighted::before {
   width: 12px;
   height: 12px;
-  background-color: #0d6efd;
+  background-color: #41b10d;
   }
 
   /* リンクのスタイル */

@@ -11,13 +11,14 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
 <MDXLayout title = "Blog"  imgSrc ="/images/Blog_Header.jpg" >
   <H1>2024以前のブログ</H1>
   <p>2024以前のブログは<a href="https://www.igemtokyotech.org/post/">こちら</a></p>
+  <H1>2025からのブログはこちら</H1>
   <div class="blog-box">
 
     
   </div>
   <div class="posts-grid">
     {allPosts.map((post) => (
-    <article class="posts-card" key={post.url}>
+    <article class="posts-card" >
       <A class="posts-a" href={post.url}>
         <div class="posts-header">
           <span class="posts-category">{post.frontmatter.category ?? 'Blog'}</span>
@@ -31,7 +32,7 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
           <h2 class="posts-title">{post.frontmatter.title}</h2>
         </div>
         <div class="posts-tags">
-          {(post.frontmatter.tags ?? []).map(tag => (
+          {(post.frontmatter.tags ?? []).map((tag: string) => (
             <span class="tag">{tag}</span>
           ))}
         </div>
@@ -47,7 +48,7 @@ const allPosts = await Astro.glob("../pages/posts/*.mdx");
 <style>
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, 280px);
   gap: 1rem;
   margin-top: 2rem;
 }
@@ -75,16 +76,10 @@ img {
   overflow: hidden;
 }
 
-.posts-header {
-  font-size: 0.9rem;
-  color: #888;
-}
-
 .posts-category {
+  font-size: 0.9rem;
   font-weight: bold;
   color: #000000;
-  background: #edecec;
-  border-radius: 0.5rem;
   padding: 0.3rem 0.6rem;
 }
 
@@ -122,4 +117,6 @@ img {
   font-size: 0.8rem;
   color: #666;
 }
+
+
 </style>

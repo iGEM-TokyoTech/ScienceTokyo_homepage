@@ -15,29 +15,7 @@ const { href, class: className, ...restProps } = Astro.props;
 </a>
 
 
-<script is:inline>
-  function scrollToAnchor(href, offset = 80) {
-    if (!href.startsWith("#")) return;
-    const id = href.slice(1);
-    const target = document.getElementById(id);
-    if (!target) return;
-    const y = target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    history.replaceState(null, "", href);
-  }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('a.astro-anchor[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", (e) => {
-        e.preventDefault();
-        const href = anchor.getAttribute("href");
-        if (href) {
-          scrollToAnchor(href, 80);
-        }
-      });
-    });
-  });
-</script>
 
 
 <style>
