@@ -3,7 +3,7 @@
  * styleはあまり決めてない。かなり根本の内容。変える必要なし
  * ページの説明とlinktytleを設定するBaseLeyoutProps
  */
- export interface BaseLayoutProps {
+export interface BaseLayoutProps {
   /**
    * ページの説明
    */
@@ -16,6 +16,20 @@
    * キーワード
    */
   keywords?: string[];
+  openGraph?: {
+    basic?: {
+      title?: string;
+      type?: string;
+      image?: string;
+      url?: string;
+    };
+    image?: {
+      url?: string;
+      alt?: string;
+      width?: number;
+      height?: number;
+    };
+  };
 }
 
 interface Props extends BaseLayoutProps {}
@@ -30,11 +44,21 @@ import {
 } from "../siteConfig/config.ts";
 import "ress/dist/ress.min.css";
 import type { PageTitle } from "../siteConfig/pages.ts";
-import { SEO } from "astro-seo"
 
-const { description = SITE_DESCRIPTION, title } = Astro.props;
+
+const { description = SITE_DESCRIPTION, title, openGraph} = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+
+
+const ogTitle = openGraph?.basic?.title ?? title ?? SITE_NAME;
+const ogType  = openGraph?.basic?.type  ?? "website";
+const ogImage = openGraph?.basic?.image ?? openGraph?.image?.url ?? SITE_OGP_URL;
+const ogUrl   = openGraph?.basic?.url   ?? Astro.url.href;
+
+const ogAlt = openGraph?.image?.alt ?? description ?? String(ogTitle);
+const ogW   = openGraph?.image?.width;
+const ogH   = openGraph?.image?.height;
 ---
 
 <!doctype html>
@@ -81,30 +105,7 @@ const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <title>{pageTitle}</title>
 
     <!-- SEO Contents -->
-    <SEO
-    title={title}
-    description={description}
-    openGraph={{
-      basic: {
-        type: 'website',
-        title,
-        image: SITE_OGP_URL,
-        url: 'https://igemsciencetokyo.com',
-      },
-      optional: {
-        description,
-      },
-    }}
-    twitter={{
-      card: 'summary_large_image',
-      site: '@igem_tokyotech',
-      title,
-      description,
-    }}
-    />
-  </head>
-  />
-
+    
   </head>
   <body>
     <slot />
