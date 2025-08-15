@@ -1,0 +1,97 @@
+---
+import ToCToggle from '../ToC/ToCToggle.astro';
+const { headings } = Astro.props;
+---
+
+<div class="toc-container">
+  <button id="toc-toggle-btn" class="toc-toggle-btn">
+    <span class="btn-text">目次を開く</span>
+  </button>
+  <div id="toc-dropdown" class="toc-toggle-dropdown hidden">
+    <ToCToggle headings={headings} />
+  </div>
+</div>
+
+<style>
+.toc-container {
+  position: fixed;
+  display:flex;
+  flex-direction: column;
+  z-index: 1000;
+  top:80px;
+  height: 60px;
+  width:100%;
+  background: #e8f8f0;
+  border: 1px solid #d1e7dd;
+}
+
+.toc-toggle-btn {
+  width: 100%;
+  padding: 0.75em;
+  font-size: 1.1em;
+  cursor: pointer;
+  text-align:right;
+}
+
+.toc-toggle-dropdown {
+  position: fixed;
+  width:300px;
+  right:0;
+  top: 140px;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+.toc-toggle-dropdown.hidden {
+  display: none;
+}
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('toc-toggle-btn');
+    var dropdown = document.getElementById('toc-dropdown');
+    var container = document.querySelector('.toc-container');
+    var btnText = toggleBtn.querySelector('.btn-text');
+    var isOpen = false;
+
+    // 目次を閉じる関数
+    function closeToc() {
+      isOpen = false;
+      dropdown.classList.add('hidden');
+      toggleBtn.classList.remove('open');
+      btnText.textContent = '目次を開く';
+    }
+
+    // 目次を開く関数
+    function openToc() {
+      isOpen = true;
+      dropdown.classList.remove('hidden');
+      toggleBtn.classList.add('open');
+      btnText.textContent = '目次を閉じる';
+    }
+
+    // トグルボタンのクリックイベント
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation(); // イベントの伝播を止める
+      if (isOpen) {
+        closeToc();
+      } else {
+        openToc();
+      }
+    });
+
+    // ドキュメント全体のクリックイベント
+    document.addEventListener('click', function(e) {
+      if (isOpen && !container.contains(e.target)) {
+        closeToc();
+      }
+    });
+
+    // ドロップダウン内のクリックイベントの伝播を止める
+    dropdown.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  });
+</script>

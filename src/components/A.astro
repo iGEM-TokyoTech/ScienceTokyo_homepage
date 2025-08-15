@@ -1,15 +1,22 @@
 ---
+// src/components/A.astro
 import type { HTMLAttributes } from "astro/types";
-
-interface Props extends HTMLAttributes<"a"> {}
-
-const { ...props } = Astro.props;
+const { href, class: className, ...restProps } = Astro.props;
 ---
 
-<a class:list={["astro-anchor", props.class]} {...props} target="_blank">
-    <slot />
-    <div class="overlink"></div>
+<a
+  href={href}
+  class:list={["astro-anchor", className]}
+  target={href?.startsWith("#") ? undefined : "_blank"}
+  {...restProps}
+>
+  <slot />
+  <div class="overlink"></div>
 </a>
+
+
+
+
 
 <style>
   .astro-anchor {
@@ -23,7 +30,8 @@ const { ...props } = Astro.props;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;          /* iframe より前面に表示 */
-    background: transparent; /* 完全に透明 */
+    z-index: 100;
+    background: transparent;
     cursor: pointer;
   }
+</style>

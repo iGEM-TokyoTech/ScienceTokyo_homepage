@@ -1,103 +1,49 @@
-/**
- * sectionizer -> TabManage -> ToCHighlighter
- */
-export class ToCHighlighter {
-    observer: IntersectionObserver;
-    highlighted: Element | null = null;
-    tocItems: HTMLLIElement[];
-    keyToCItemMap: { [key: string]: HTMLLIElement } = {};
-    private highlightedSection: Element | null = null;
-    private highlifhtedSecHeight: number = 0;
-    static readonly OBSERVED_CLASS: string = "__toc-observed";
-    static readonly OBSERVED_SELECTOR: string = `.${ToCHighlighter.OBSERVED_CLASS}`;
-    static readonly TOC_ITEM_ID_PREFIX: string = "toc-item";
-  
-    static genToCItemId(slug: string): string {
-      return `${ToCHighlighter.TOC_ITEM_ID_PREFIX}-${slug}`;
+export function ToCHighlighter(
+  tocItemSelector: string = '.toc li',
+  headingSelector: string = 'h1[id], h2[id]',
+  highlightClassName: string = 'highlighted',
+  scrollOffset: number = 80
+): void {
+  // DOMが読み込まれた後に実行
+  document.addEventListener('DOMContentLoaded', () => {
+    const tocItems = Array.from(document.querySelectorAll(tocItemSelector));
+    const headings = Array.from(document.querySelectorAll<HTMLElement>(headingSelector));
+
+    // 対象要素がなければ何もしない
+    if (!tocItems.length || !headings.length) {
+      return;
     }
-  
-    /**
-     *
-     * @param tocs all `ToC`
-     */
-    constructor(tocs: HTMLUListElement[]) {
-      this.observer = new IntersectionObserver(this.handleIntersect.bind(this), {
-        root: null, // viewport
-        rootMargin: "0px",
-        threshold: Array.from(Array(101), (_, i) => i / 100), // 0% to 100% thresholds
-      });
-  
-      this.tocItems = [];
-  
-      tocs.forEach((toc) => {
-        this.tocItems = this.tocItems.concat(
-          Array.from(toc.querySelectorAll<HTMLLIElement>(":scope > li")),
-        );
-      });
-  
-      this.createMap();
-    }
-  
-    private createMap(): void {
-      this.tocItems.forEach((tocItem) => {
-        /**
-         * slug MUST be unique because tocItem's slug has tab prefix
-         *
-         * ref: ToC.astro
-         */
-        this.keyToCItemMap[tocItem.dataset.slug!] = tocItem;
-      });
-    }
-  
-    public init() {
-      const sections = document.querySelectorAll(
-        ToCHighlighter.OBSERVED_SELECTOR,
-      );
-      sections.forEach((section) => this.observer.observe(section));
-    }
-  
-    private handleIntersect(entries: IntersectionObserverEntry[]) {
-      let maxRatioEnt: IntersectionObserverEntry | null = null;
-      let maxHeight = 0;
-  
-      for (const ent of entries) {
-        if (maxHeight < ent.intersectionRect.height) {
-          maxHeight = ent.intersectionRect.height;
-          maxRatioEnt = ent;
-        }
-  
-        if (ent.target === this.highlightedSection) {
-          this.highlifhtedSecHeight = ent.intersectionRect.height;
+
+    const onScroll = () => {
+      let currentId: string | null = null;
+
+      // 現在のスクロール位置に最も近い見出しIDを探す
+      for (const heading of headings) {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top <= scrollOffset) {
+          currentId = heading.id;
         }
       }
-  
-      if (maxRatioEnt && maxHeight > this.highlifhtedSecHeight) {
-        const sec = maxRatioEnt.target as HTMLElement;
-  
-        /**
-         * this slug MUST be tab supported
-         */
-        const slug = sec.dataset.h1id;
-  
-        if (slug) {
-          const tocItem = this.keyToCItemMap[slug];
-  
-          if (tocItem && tocItem !== this.highlighted) {
-            this.clearHighlighted();
-            tocItem.classList.add("highlighted");
-            this.highlighted = tocItem;
-            this.highlightedSection = maxRatioEnt.target;
-            this.highlifhtedSecHeight = maxHeight;
-          }
+
+      // ToCの各項目に対してハイライトを付け外しする
+      tocItems.forEach(item => {
+        // HTMLElementでない可能性を考慮
+        if (!(item instanceof HTMLElement) || !item.dataset.slug) {
+          return;
         }
-      }
-    }
-  
-    private clearHighlighted() {
-      if (this.highlighted) {
-        this.highlighted.classList.remove("highlighted");
-        this.highlighted = null;
-      }
-    }
-  }
-  
+
+        if (item.dataset.slug === currentId) {
+          item.classList.add(highlightClassName);
+        } else {
+          item.classList.remove(highlightClassName);
+        }
+      });
+    };
+
+    // スクロールイベントに登録
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ページ読み込み時に一度実行して初期状態を設定
+    onScroll();
+  });
+}

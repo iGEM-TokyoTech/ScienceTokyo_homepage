@@ -2,7 +2,7 @@ export type PageTitle =
   | "Home"
   | "About"
   | "Project"
-  | "Team_members"
+  | "Team"
   | "Blog"
   | "Contact"
   | "Contribution"

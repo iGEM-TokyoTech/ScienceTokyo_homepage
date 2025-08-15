@@ -1,0 +1,170 @@
+---
+/**
+ * レイアウトの中でマークダウンの要素のレイアウト
+ */
+import Layout from "./Layout.astro";
+import MDXDocEnv from "../components/MDXDocEnv.astro";
+import { type BaseLayoutProps } from "./BaseLayout.astro";
+import { type MarkdownHeading } from "astro";
+import ToC from "../components/ToC/ToC.astro";
+import Toggle from "../components/Navigation/Toggle.astro";
+
+interface Props extends BaseLayoutProps {
+  headings: MarkdownHeading[];
+  frontmatter: {
+    title: string;
+    imgSrc?: string;
+    description?: string;
+    date?: string;
+    tags?: string[];
+  };
+}
+
+const { frontmatter, headings, ...props } = Astro.props;
+---
+
+<Layout headings={headings} {...props}>
+  <div class="toc-toggle-container">
+    <Toggle headings={headings}/>
+  </div> 
+  <div class="align-contents">
+    <div class="toc-sidebar">
+      <ToC headings={headings} />
+    </div>
+    <div class="post-wrapper">
+      <div class="post-card">
+        <div class="post-header">
+          <img class="post-header-backgroundimg" src={frontmatter.imgSrc ?? ""} />
+        </div>
+        <div class="post-header-contents">
+          <h1 class="post-header-title">{frontmatter.title}</h1>
+          <p class="post-header-description">{frontmatter.description}</p>
+          <div class="post-header-tags">
+            {(frontmatter.tags ?? []).map(tag => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+          <div class="post-header-meta">
+            <span class="post-header-date">🖊 {frontmatter.date ?? '日付不明'}</span>
+          </div>
+        </div>
+        <slot /> 
+      </div>
+    </div> 
+  </div>
+  
+</Layout>
+
+
+
+<style>
+  .align-contents {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+  }
+  
+  .toc-sidebar {
+    display: block;
+    width:20% ;
+    height: 100%;
+
+  }
+  .toc-toggle-container {
+    display: none;
+  }
+  .post-wrapper {
+    width: 100%;
+    height:auto;
+    display: flex;
+    padding:1rem;
+  }
+
+  .post-card {
+    position: relative;
+    width: 100%; 
+    border-radius: 0.5rem;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .post-header {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+  }
+  .post-header-backgroundimg {
+    position: absolute;
+    margin:5%;
+    top: 0;
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .post-header-contents {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  .post-header-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  .post-header-description {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .post-header-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .post-header-tags .tag {
+    color: #000;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    margin: 0.2rem;
+    font-size: 0.9rem;
+  }
+  .post-header-meta {
+    font-size: 0.8rem;
+    color: #000;
+  }
+  .post-header-date {
+    margin-left: 0.5rem;
+  }
+  
+  /* スムーズスクロールのための設定 */
+  html {
+    scroll-behavior: smooth;
+  }
+@media (max-width: 1024px) {
+  .toc-sidebar {
+    display: none;
+  }
+  .toc-toggle-container {
+    display: block;
+    margin-top: 80px; 
+  }
+
+  .post-header{
+    height: 40vh;
+  }
+}
+</style>
+
+

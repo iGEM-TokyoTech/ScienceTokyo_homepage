@@ -1,0 +1,184 @@
+---
+/**
+ * subpageの目次の設定
+ * markdownのheadingと目次のheadingの連携
+ */
+import { type MarkdownHeading } from "astro";
+
+import A from "../A.astro";
+import type { HTMLAttributes } from "astro/types";
+
+export interface ToCUIProps extends HTMLAttributes<"ul"> {
+  headings: MarkdownHeading[];
+}
+
+type Props = ToCUIProps;
+
+
+const { headings, ...props } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
+---
+
+<ul class={props.class} class:list={["toc"]} {...props}>
+  <p class="toc-title">目次</p>
+  {
+    filteredHeadings.map((heading) => {
+      return (
+        <li
+          class={`depth${heading.depth} ${heading.depth === 1 ? 'h1-item' : 'h2-item'}`}
+          
+          data-slug={heading.slug}
+        >
+          <A href={"#" + heading.slug}>{heading.text}</A>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<script>
+  import { AScroll } from '../scripts/AScroll.ts';
+  AScroll('.toc a[href^="#"]', 80);
+  import { ToCHighlighter } from '../scripts/ToCHighlighter.ts';
+  ToCHighlighter();
+</script>
+
+
+
+<style>
+  /* カラー変数の定義 */
+  :root {
+    --toc-bg-color: #f0fff4; /* とても淡い緑 */
+    --toc-border-color: #c1e0c1; /* 薄い緑 */
+    --toc-link-color: #2d8f2d; /* 緑 */
+    --toc-link-hover-color: #169e16; /* 濃い緑 */
+    --toc-highlight-gradient: linear-gradient(
+      180deg,
+      #05966c,
+      #0b6380,
+      #bfcd5a
+    ); /* グラデーション縦ライン */
+    --toc-text-color: #000000; /* 通常時の文字色（黒） */
+    --toc-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* モダンなフォント */
+    --toc-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* シャドウを強化 */
+    --toc-border-radius: 8px; /* 角を丸く */
+    --toc-padding: 1rem; /* パディング */
+    --toc-transition: all 0.3s ease; /* トランジション */
+  }
+
+  /* 全体のトゥートゥールのスタイル */
+  .toc {
+    background-color: var(--toc-bg-color); /* 背景色 */
+    border: 1px solid var(--toc-border-color); /* 境界線 */
+    border-radius: var(--toc-border-radius); /* 角の丸み */
+    box-shadow: var(--toc-box-shadow); /* シャドウ */
+    padding: var(--toc-padding); /* パディング */
+    list-style: none; /* デフォルトのリストスタイルを無効化 */
+    width: 200px; /* 最大幅 */
+    font-family: var(--toc-font-family); /* フォント */
+    transition: var(--toc-transition); /* トランジション */
+    color: var(--toc-text-color); /* 文字色 */
+    position:fixed;
+    top: 30vh; /* 上からの位置 */
+    left: 1%; /* 右からの位置 */
+    border-left: 2px solid #d1e7dd;
+    
+  }
+  .toc-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--toc-text-color);
+    text-align: center;
+  }
+
+  /* トゥートゥールが不可視の場合のスタイル */
+  .toc.invisible {
+    display: none;
+  }
+
+  /* リストアイテムのスタイル */
+  .toc li {
+    margin-bottom: 0.75rem; /* アイテム間のスペース */
+    position: relative; /* アイコンの位置調整 */
+    transition: transform 0.3s ease; /* トランジション */
+    padding-left: 1.5rem;
+  }
+
+  .toc li::before {
+  content: "";
+  position: absolute;
+  left: -0.65rem;
+  top: 0.4rem;
+  width: 8px;
+  height: 8px;
+  background-color: #cfe2ff;
+  border-radius: 50%;
+  z-index: 1;
+  transition: background-color 0.3s ease;
+ }
+ .toc li.highlighted::before {
+  width: 12px;
+  height: 12px;
+  background-color: #41b10d;
+  }
+
+  /* リンクのスタイル */
+  .toc a {
+    text-decoration: none; /* 下線を無効化 */
+    color: var(--toc-text-color); /* 通常時の文字色を黒に設定 */
+    font-size: 1rem; /* フォントサイズ */
+    font-weight: 500; /* フォントウェイト */
+    position: relative; /* 疑似要素の配置基準 */
+    transition: color 0.3s ease, transform 0.3s ease; /* トランジション */
+  }
+
+  /* リンクにホバーしたときのスタイル */
+  .toc a:hover {
+    color: var(--toc-link-hover-color); /* ホバー時の文字色 */
+    transform: translateX(5px); /* ホバー時に少し右に移動 */
+  }
+  .toc .h2-item {
+  font-size: 0.95rem;
+  color: #555;
+  margin-left: 1rem;
+  }
+
+/* depth1クラスにposition: relativeを追加 */
+.depth1 {
+  position: relative; /* ::before疑似要素の基準位置 */
+  padding-left: 0.75rem; /* 左側のスペース */
+}
+
+/* ::before疑似要素を使用してボーダーを作成 */
+.depth1::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0; /* 初期状態では幅0 */
+  background: var(--toc-highlight-gradient); /* グラデーション */
+  transition: width 0.3s ease; /* 幅のトランジション */
+}
+
+/* 必要に応じてpadding-leftを調整 */
+.depth1.highlighted {
+  padding-left: calc(0.75rem + 4px); /* ボーダーの幅を考慮 */
+}
+
+  /* レスポンシブデザイン */
+  @media (max-width: 768px) {
+    .toc {
+      max-width: 100%; /* 幅を100%に */
+      padding: 0.75rem; /* パディングを調整 */
+    }
+
+    .toc a {
+      font-size: 0.95rem; /* フォントサイズを少し小さく */
+    }
+  }
+</style>
+
+
+

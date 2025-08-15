@@ -17,8 +17,6 @@ interface Props extends BaseLayoutProps {
 
 const { headings, ...props } = Astro.props;
 
-export const navigationWidth = "200px";
-
 ---
 
 <BaseLayout {...props}>
@@ -35,30 +33,35 @@ export const navigationWidth = "200px";
 
 
 <style>
-    .background-image {
-        background-image: url('/images/Home.svg'); 
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        z-index: -1;
-    }
+  .background-image {
+    background-image: url('/images/Home.svg'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    z-index: -1;
+    margin: 0;
+    padding: 0;
+  }
 
+  .content {
+    font-size: 1rem;
+    margin-top: 85px;
+    z-index: 1;
+    position: relative;
+    min-height: calc(100vh - 85px);
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
     .content {
-        font-size: 1rem;
-        margin-top: 85px;
-        z-index: 1;
-        position: relative; 
+        width: 100%;
+        box-sizing: border-box;
+        margin-right: 0;
     }
-
-    @media (max-width: 768px) {
-        .content {
-            width: 100%;
-            padding: 0 15px;
-            box-sizing: border-box;
-        }
-    }
+  }
 </style>

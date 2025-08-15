@@ -2,7 +2,7 @@ import Anchor from "./Anchor.astro";
 import H1 from "./H1.astro"; 
 import H2 from "./H2.astro";
 import H3 from "./H3.astro";
-
+import UnderedList from "./UnderedList.astro";
 import OrderedList from "./OrderedList.astro";
 import Paragraph from "./Paragraph.astro";
 import Strong from "./Strong.astro";
@@ -18,11 +18,10 @@ const defaultComponents = {
   a: Anchor,
   p: Paragraph,
   strong: Strong,
+  ul: UnderedList,
   ol: OrderedList,
   em: Emphasis,
   table: Table,
-  
-  
 };
 
 export default defaultComponents;

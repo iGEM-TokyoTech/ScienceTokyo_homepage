@@ -22,6 +22,7 @@ const { ...props } = Astro.props;
 
   .mdx-table {
     width: 100%;
+    table-layout: auto;
     border-collapse: collapse;
     text-align: center;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* モダンなフォントに変更 */
@@ -29,7 +30,7 @@ const { ...props } = Astro.props;
 
   .mdx-table :global(th) {
     background-color: #e6ffe6; /* ヘッダーの淡い緑色 */
-    border: 2px solid #8fbc8f; /* ヘッダーのボーダーを太く */
+    border: 2px solid #8f95bc; /* ヘッダーのボーダーを太く */
     padding: 12px 20px;
     font-weight: bold;
     position: sticky;
@@ -40,7 +41,7 @@ const { ...props } = Astro.props;
   .mdx-table :global(td),
   .mdx-table :global(th) {
     padding: 12px 20px;
-    min-width: 50px;
+    min-width:100px;
     border: 1px solid #d5e5ca; /* セルにボーダーを追加して縦線を表示 */
   }
 
@@ -49,9 +50,7 @@ const { ...props } = Astro.props;
   }
 
   /* 偶数行の背景色を変更 */
-  .mdx-table :global(tr:nth-child(even) td) {
-    background-color: #f0fff4; /* 偶数行に淡い緑色 */
-  }
+  
 
   .mdx-table :global(caption) {
     caption-side: top;
