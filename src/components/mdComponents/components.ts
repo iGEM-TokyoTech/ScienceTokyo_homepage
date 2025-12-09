@@ -9,6 +9,7 @@ import Strong from "./Strong.astro";
 import Emphasis from "./Emphasis.astro";
 import Table from "./Table.astro";
 import H4 from "./H4.astro";
+import Image from "./Image.astro";
 
 const defaultComponents = {
   h1: H1,
@@ -17,6 +18,7 @@ const defaultComponents = {
   h4: H4,
   a: Anchor,
   p: Paragraph,
+  img: Image,
   strong: Strong,
   ul: UnderedList,
   ol: OrderedList,

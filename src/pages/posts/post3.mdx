@@ -1,0 +1,353 @@
+---
+title: "参考文献管理"
+image: /images/postimages/sankoubunkenn/zostero_logo.png
+imgSrc: /images/postimages/sankoubunkenn/zostero_logo.png
+tags: ["個人ブログ", "ツール"]
+date: 2025/08/15
+layout: ../../layouts/PostLayout.astro
+
+openGraph:
+  basic:
+    title: "参考文献管理"  
+    type: "article"                         
+    image: "/images/postimages/sankoubunkenn/zostero_logo.png"
+
+---
+import defaultComponents from "../../components/mdComponents/components.ts";
+import Image from "../../components/mdComponents/Image.astro";
+import Card from "../../components/mdComponents/Card.astro";
+import Aside from "../../components/Aside.astro";
+
+export const components = defaultComponents;
+
+
+# はじめに
+
+こんにちは。気合を入れるためにスタバでスモアラテを飲みながらこの文章を書いているiGEM Sciecne Tokyoのぶっちです。文章を書き始める前にもう半分くらい飲んでしまいました。これめっちゃおいしい😋。今年度のiGEMは日本チームが全員Goldメダルを獲得できたというめでたい年となりました。うちのチームはもう少し上を目指したかったのですが、とりあえずGoldメダルが取れて一安心といったところです。
+
+さて本題です。私は去年wikiを書いている途中に非常に苦しんでいたことがあります。それは参考文献の引用整理です。昨年度のiGEM Tokyo Techでは参考文献の管理が結構甘くwikiを書くときに非常に苦労しました。当時2年生の私はそのあたりの雑用をやっていたのですが昔見た参考文献がどこに行ったか分からなくなってNotionをあさったり、文章を修正するたびに参考文献の番号がずれて一から順番を手動で直さないといけなかったりマジで時間のロスがヤバかったです。なので今年度はチームメンバーやOBOGの助けを借りながら「ぼくのかんがえたさいきょうのiGEM用参考文献管理」を作ってみたので紹介します。他のチームもそれぞれのやり方を確立していると思いますが、参考程度にご覧ください。
+
+具体的に言うとうちのチームが情報管理に使用しているNotion+Googledriveと相性の良かったZoteroを使ったシステムです。
+
+<Aside>
+❗
+※これは2025年12月現在の情報なので今後のアップデートで細かい設定が変わるかもしれません。最新の情報を調べながら使うことをおすすめします。
+
+</Aside>
+
+# 参考資料
+
+<a href="https://qiita.com/koki3141/items/5451278a5defc382b3c2#zoteroonedrivenotion%E3%81%AE%E9%80%A3%E6%90%BA">Zotero×OneDrive×Notionで最強の論文管理ソフトを作成しよう</a>
+
+<a href="https://note.com/htana117/n/n99674d020a0a">Zotero・Notion・NotebookLMを使った論文理解と管理方法</a>
+
+このあたりを参考にしてます。
+
+今執筆時に見たら新しい記事も増えてたんで参考までに添付します。
+
+<a href="https://qiita.com/nekokaitaiyo_ne/items/689e84a6abe20a23560a">Zotero7(Windows11)+GoogleDrive+Zotmoov+iPadによる論文管理</a>
+
+# このシステムのメリット
+
+1. チーム全体で資料をタグつけて管理することができる
+
+Zoteroのメインの機能はこの文献管理システムです。
+
+チームで複数の文献をタグごとに分別するのでどの文献がどのパートに関するものかが一目で見分けやすくなっています。タグを活用したAND,OR,NOT検索もできるので有能です。
+
+2. 文献が簡単に登録できる、メモが残しやすい
+
+デフォルトの機能で、DOIのリンクやPMIDを直接入力することで登録することができます。
+
+複数のDOIを同時に入力することもできるので一気に複数の文献を登録することができて便利。
+
+![](/images/postimages/sankoubunkenn/sankou_1.png)
+
+他にもブラウザの拡張機能で、今ウエブサイトで開いている論文をワンクリックで登録することができます。これがめちゃくちゃ便利。
+
+![](/images/postimages/sankoubunkenn/sankou_2.png)
+
+さらに登録した文献はZoteroからサイトに飛ぶことができ、ダウンロードしたPDFにマークアップや書き込みもでき、さらにはメモもつけることができる。拡張機能を駆使すれば選択したところを翻訳して読んだり、AIとつなげて論文のまとめを作ることができる（ここまではあんまりやらなくてもいいと思うけど）。
+
+これらをうまく駆使すれば「あれ、この論文なんのだっけ？」みたいなことは確実に減らすことができます。
+
+さらに手動入力にはなってしまうのですが、書籍や論文以外のWebサイト（他のチームのwikiなど）も登録することができます。
+
+3. wikiを書くときにタグ引用ができる
+
+![](/images/postimages/sankoubunkenn/sankou_3.png)
+![](/images/postimages/sankoubunkenn/sankou_4.png)
+
+これが一番のこのシステムを頑張って作った理由です。上記画像のCitation keyを設定し、文中に入れれば勝手に番号が整理され、登場した順にReferenceが作成されます。いちいちReferenceを作ったり並び替えたりする必要がなくなります。
+
+以下はうちのwikiのDescriptionの一部です。「gearry2016」とか「ananthakrishnan2018」とかがCitation keyですね。ほんとはCitation keyを書くだけで引用を作りたかったのですがそこまではできず…wikiを書くときはひたすらCitation keyをコピペしてました。
+
+これがあるだけで引用の順番を気にしないでwikiをかけるようになったので少しやりやすさが上がったように感じています。
+
+<Aside>
+炎症性腸疾患(IBD)は、消化管粘膜に慢性的な炎症を引き起こす完治が難しい疾患です。IBDは潰瘍性大腸炎（UC）クローン病（CD）に分けられ、それぞれ大腸、消化管全体の炎症を引き起こし、血便や下痢、腹痛の症状が長期的に起こります。遺伝的、環境的要因で免疫に異常が起こりIBDが発症するのですが、詳細な原因はいまだわかっていません`<Quote src="gearry2016" {...bib} /><Quote src="ananthakrishnan2018" {...bib} />`。IBDは重症化すると大腸がんなどの原因となります。
+</Aside>
+
+[1][2]のようにクリックしたら下のReferenceに飛ぶようになる。
+
+
+![](/images/postimages/sankoubunkenn/sankou_5.png)
+
+
+
+# Zoteroのセットアップ
+
+基本的には<a href="https://qiita.com/koki3141/items/5451278a5defc382b3c2#zoteroonedrivenotion%E3%81%AE%E9%80%A3%E6%90%BA">この参考資料</a>と一緒なのですが、自分がダウンロードするときにどのような設定をしたかを載せていきます。
+
+### 1. Zoteroのダウンロード
+
+<a href="https://www.zotero.org/">Zoteroのホームぺージ</a>から Log In → Register for a free accountで新規会員登録
+
+![](/images/postimages/sankoubunkenn/sankou_6.png)
+
+ダウンロード設定はStandardで問題なし
+
+![](/images/postimages/sankoubunkenn/sankou_7.png)
+
+会員登録が終わったら Download からそれぞれのOS用のZoteroをダウンロード
+
+右側のブラウザとの連携は各設定が終わったらダウンロードして使ってみて下さい
+
+![](/images/postimages/sankoubunkenn/sankou_8.png)
+
+### 2. Zoteroの初期設定
+
+ここが参考資料と違うところになります。チームで参考資料を管理したいのでZoteroのグループ機能を使います。
+
+詳しくは<a href="https://www.zotero.org/">公式の説明</a>を見てもらいたいのですが、これを使うことによって複数人でZoteroの文献を同期することができます。チーム作業が多いiGEMにこれがぴったりです。
+
+グループの作り方
+
+以下ページから名前を設定し（うちはiGEM Sciecne Tokyoにしました、後から気づいたけど多分年度ごとに分けた方がいい）、グループタイプを選択（なんでもいい）。
+
+![](/images/postimages/sankoubunkenn/sankou_9.png)
+
+グループを作ったらManage Membersから他の人のアカウントに紐づいているメアドに招待を送信することでチーム全体が使えるようになります。
+
+![](/images/postimages/sankoubunkenn/sankou_10.png)
+
+その状態でアプリにログインすると以下のようにグループのライブラリっていうのが完成すると思います。ここにみんなで参考文献をためていく感じになります。
+
+![](/images/postimages/sankoubunkenn/sankou_11.png)
+
+ダウンロードしたらさっき登録したアカウントでログインしてEdit→Settingで初期設定をします。
+
+![](/images/postimages/sankoubunkenn/sankou_12.png)
+
+あとは<a href="https://qiita.com/koki3141/items/5451278a5defc382b3c2#zoteroonedrivenotion%E3%81%AE%E9%80%A3%E6%90%BA">この参考資料</a>と同じように初期設定をすればいいのですが一応自分の設定を載せておきます。
+
+参考資料と違うのは言語設定が日本語なことくらい…?
+
+ちなみにPDF書類を開くというのをZoteroではなく普段使っているPDFエディタに変更することができます（Crome, Edge, Adobeなど）。そっちを使い慣れている人はそっちを開くって設定してもいいんですけどZoteroのエディタが優秀で拡張性が高いのでエディタはZoteroをおすすめします。
+
+![](/images/postimages/sankoubunkenn/sankou_13.png)
+
+![](/images/postimages/sankoubunkenn/sankou_14.png)
+
+![](/images/postimages/sankoubunkenn/sankou_15.png)
+
+同期はちゃんとグループのライブラリも同期することを忘れずに。
+
+![](/images/postimages/sankoubunkenn/sankou_16.png)
+
+![](/images/postimages/sankoubunkenn/sankou_17.png)
+
+詳細の基本ディレクトリはチームのグーグルドライブに紐づけています。ZotMoovも同様。
+
+あとはほとんどデフォルトのままだった気がする。
+
+![](/images/postimages/sankoubunkenn/sankou_18.png)
+
+# Notionとの連携
+
+このあたりでスタバを出て家でご飯を食べながら執筆してます。これ思ったより時間かかりそうって思ってきました。
+
+<a href="https://github.com/dvanoni/notero">Notero</a>というプラグインを使います。<a href="https://qiita.com/koki3141/items/5451278a5defc382b3c2#zoteroonedrivenotion%E3%81%AE%E9%80%A3%E6%90%BA">この参考資料</a>から設定方法が変わっていそうだったので記載します。
+
+はじめに
+
+Notionに論文管理をするための空リストを先に用意しておいてください。
+
+![](/images/postimages/sankoubunkenn/sankou_19.png)
+
+1. Noteroをダウンロード後、設定からConnect to Notionを選択
+
+![](/images/postimages/sankoubunkenn/sankou_20.png)
+
+2. Noteroへの権限を許可（自分はすでにされていた）
+
+![](/images/postimages/sankoubunkenn/sankou_21.png)
+
+3. Noteroに共有するページを選択する
+
+![](/images/postimages/sankoubunkenn/sankou_22.png)
+
+4. 先に作っておいたリストを検索して選択する
+
+![](/images/postimages/sankoubunkenn/sankou_23.png)
+
+5. 指示に従ってZoteroを開く
+
+    これで共有完了です。
+
+![](/images/postimages/sankoubunkenn/sankou_24.png)
+
+![](/images/postimages/sankoubunkenn/sankou_25.png)
+
+これでNotionのリストに文献情報が共有できました。プロパティの選択で好きに表を作ることができます。
+
+![](/images/postimages/sankoubunkenn/sankou_26.png)
+
+# 文献を実際に管理してみる
+
+文献の登録方法は先程振れた通り、DOIを入力するかブラウザの拡張機能を使うかの2択です。
+
+DOIの登録方法はいいとしてブラウザの拡張機能についての説明をします。
+
+[拡張機能のサイト](https://chromewebstore.google.com/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc)から拡張機能をダウンロードしてアカウントにログインした後、拡張機能をピン止めすれば大丈夫です。
+
+![](/images/postimages/sankoubunkenn/sankou_27.png)
+
+文献を登録出来たら登録した文献を選択し、タグを追加します。
+
+タグは同じ意味のを複数作らない限りは好きなだけ作ってもいいと思います。
+
+ちなみにnotionというタグはNotion に同期済みの文献に勝手につくやつなので気にしなくていいです。
+
+![](/images/postimages/sankoubunkenn/sankou_28.png)
+
+さらに左下のタグを選択すると簡易的なAND検索ができます。
+
+![](/images/postimages/sankoubunkenn/sankou_29.png)
+
+また、高度な検索を使うとAND、OR、NOT検索ができるのでタグをつけ忘れている文献を探した理ができます。
+
+![](/images/postimages/sankoubunkenn/sankou_30.png)
+
+最後に文献を選択して（Ctrl + Aで全体選択するのが楽）Sync to Notionを選ぶことでNotionに同期することができます。
+
+![](/images/postimages/sankoubunkenn/sankou_31.png)
+
+# Wikiへの引用を楽に
+
+### Better BibTeXの導入
+
+<a href="https://retorque.re/zotero-better-bibtex/">Better BibTeX</a>の公式サイトから導入したあとに以下スクショのように設定します。（以下はデフォルト）
+
+![](/images/postimages/sankoubunkenn/sankou_32.png)
+
+ここのCitation keyの設定を変えることでCitation keyを好きにいじることができます。
+
+自分のおすすめは「auth.lower + year」で筆頭著者＋発行年度にすることです。
+
+他にもテキストを入力したりまあまあの拡張性があるので<a href="https://retorque.re/zotero-better-bibtex/citing/">Citation keyの設定方法</a>を見ながら使いやすいようにいじってみてください。
+
+### Wikiの引用
+
+最初に少し説明したように以下のように文章を打てば勝手に引用が作成されるようにしました。
+
+以下はチーム内の説明用の資料です。
+
+<Aside>
+  ## ✅引用について
+
+  実装はこんな感じだと思う
+
+  1. .bibファイルに全ての参考文献のデータを入れる（その時に，各文献に一意な名前を決める→「2025論文管理」のCitation Keyが良いかな？）,
+  2. 原稿で[1]みたいに文中に入れたい箇所に下記を挿入,
+
+  ```
+  <Quote src="mark" {...bib} />
+  ```
+
+  ```
+  # 挿入するコンポーネント
+  <Quote src="mark" {...bib} />
+
+  # .mdxファイルに書くときの例
+  これは，～～～～である<Quote src="mark" {...bib} />．そのため，～～～
+  # →「これは，～～～～である[1]．そのため，～～～」と表示される
+
+  ```
+
+  1. 作った原稿の一番下に下記を記入,
+
+  ```
+  <ReferenceList {...bib} />
+
+  ```
+
+  この原稿を作ってくれると，mdxにコピペするだけで，
+
+  引用に関して
+
+  は自動適用される
+
+</Aside>
+
+<Aside>
+炎症性腸疾患(IBD)は、消化管粘膜に慢性的な炎症を引き起こす完治が難しい疾患です。IBDは潰瘍性大腸炎（UC）クローン病（CD）に分けられ、それぞれ大腸、消化管全体の炎症を引き起こし、血便や下痢、腹痛の症状が長期的に起こります。遺伝的、環境的要因で免疫に異常が起こりIBDが発症するのですが、詳細な原因はいまだわかっていません`<Quote src="gearry2016" {...bib} />``<Quote src="ananthakrishnan2018" {...bib} />`。IBDは重症化すると大腸がんなどの原因となります。
+</Aside>
+
+[1][2]のようにクリックしたら下のReferenceに飛ぶようになる。
+
+![](/images/postimages/sankoubunkenn/sankou_5.png)
+
+## 実装について
+
+多分いろいろなやり方があると思うのですが、うちはこうでしたってのを紹介します。
+
+参考文献管理のリストをフルページで表示するとCSVでエクスポートすることができます。
+
+その中のFull Citationの項目がバンクーバー式になっているはずです。
+
+![](/images/postimages/sankoubunkenn/sankou_33.png)
+
+それを以下のリンクのコードを使って移します。
+
+https://github.com/iGEM-TokyoTech/bibTex-conversion
+
+そうするとbibファイルになるので扱いやすくなります。ちなみにZoteroの拡張機能でbibでファイルをダウンロードする方法もあるのでそっちでもいいと思う。
+
+これらをすれば一通りのやりたいことができるようになります。Zoteroは拡張機能を入れることによるカスタマイズ性が非常に高いので自分なりの使い方を模索してみるのもいいと思います。
+
+# おまけ
+
+上の内容とは直接関係ないけど自分が活用している拡張機能を紹介します。
+
+[Translate](https://github.com/windingwind/zotero-pdf-translate)
+
+GeminiやChat GptなどさまざまなLLMのAPIを活用してZotero内のPDFエディタで選択した文を英訳してくれる拡張機能です。少しの利用ならGeminiのAPIを使って無料でできるのでZoteroに取り込んだPDFにメモりたい人は便利かも
+
+![](/images/postimages/sankoubunkenn/sankou_34.png)
+
+[Papers Gpt](https://www.papersgpt.com/)
+
+さまざまなLLMとつないで論文に関する質問に答えてくれたり、ボタン選択で様々なまとめを作ってくれます。このまとめはZotero内部のNotesにも書けるのでZoteroで論文の内容をまとめておきたい人は便利。
+
+でもまあ普通にNotebook LLMとか使った方が使いやすいかもしれない。
+
+![](/images/postimages/sankoubunkenn/sankou_35.png)
+
+[Better Notes](https://github.com/windingwind/zotero-better-notes)
+
+ZoteroのNotes機能
+
+ZoteroのNotesはテキストのみだけだったのがMark downが使えるようになりメモがより取りやすくなる機能
+
+Zotero→Notionの同期はできるがNotion→Zoteroの同期はできないのでできる限りZoteroでメモなどを完結させたい場合は需要があるかも
+
+ちなみにNotesはNotionの本文部分に記載される。
+
+![](/images/postimages/sankoubunkenn/sankou_36.png)
+
+### アプリ版について
+
+iPadやスマホでもZoteroを使うことができる。iPadとか入れておけば外でも論文を見れるしペンを使って書き込むことができるので手書きでメモりたい場合は便利。Notionにも気軽に飛べるのでスマホやiPadでNotionを使っている人は使いやすいかも。しかし同期設定をうまくしないと見れないのでめんどくさい。個人的にはまあやらなくてもいいかなくらい。
+
+ここまで書いてたら深夜2時30分になってしまいました。そろそろ寝ようと思います。何かわからないことがあればJapancomunittyでもなんでもいいので連絡してくれれば答えられることは答えます。

@@ -74,16 +74,24 @@ const filteredHeadings = headings.filter(h => h.depth === 1 || h.depth === 2);
     box-shadow: var(--toc-box-shadow); /* シャドウ */
     padding: var(--toc-padding); /* パディング */
     list-style: none; /* デフォルトのリストスタイルを無効化 */
-    width: 200px; /* 最大幅 */
+    width: 300px; /* 最大幅 */
+    height:70vh;
     font-family: var(--toc-font-family); /* フォント */
     transition: var(--toc-transition); /* トランジション */
     color: var(--toc-text-color); /* 文字色 */
     position:fixed;
-    top: 30vh; /* 上からの位置 */
+    top: 20vh; /* 上からの位置 */
     left: 1%; /* 右からの位置 */
     border-left: 2px solid #d1e7dd;
-    
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* iOSで慣性スクロール */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
   }
+
+  .toc::-webkit-scrollbar { width: 8px; }
+  .toc::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+
   .toc-title {
     font-size: 1.2rem;
     font-weight: bold;
